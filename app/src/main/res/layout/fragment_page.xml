@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_page_rootview"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".controllers.fragments.PageFragment">
+
+    <ImageView
+        android:id="@+id/fragment_page_mood_img"
+        android:layout_width="325dp"
+        android:layout_height="253dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/smiley_happy" />
+
+</RelativeLayout>
