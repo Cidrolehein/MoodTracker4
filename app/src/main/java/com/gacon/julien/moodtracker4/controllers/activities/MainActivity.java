@@ -1,6 +1,7 @@
 package com.gacon.julien.moodtracker4.controllers.activities;
 
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,6 +16,7 @@ import android.widget.EditText;
 
 import com.gacon.julien.moodtracker4.R;
 import com.gacon.julien.moodtracker4.adapters.PageAdapter;
+import com.gacon.julien.moodtracker4.models.GraphData;
 import com.gacon.julien.moodtracker4.models.MoodAndCommentItem;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -23,11 +25,12 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ArrayList<MoodAndCommentItem> mMoodListItems;
+    private ArrayList<GraphData> mGraphData;
     private int mPosition;
     private Gson gson;
     private String mNewComment = "No comment";
@@ -81,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent historyActivityIntent = new Intent(MainActivity.this, HistoryActivity.class);
                 startActivity(historyActivityIntent);
+
             }
         });
 
@@ -266,26 +270,53 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void addToList () {
+    private Float getCurrentPositionForGraphData() {
 
-        if (mMoodListItems == null) {
-            mMoodListItems = new ArrayList<>();
+        mCurrentPosition = pager.getCurrentItem();
+
+        // Get Current Position for Graph Data Size
+
+        switch (mCurrentPosition) {
+            case 0:
+                return 1f;
+            case 1:
+                return 2f;
+            case 2:
+                return 3f;
+            case 3:
+                return 4f;
+            case 4:
+                return 5f;
+            default:
+                return null;
+
         }
 
-        String myPosition = getCurrentPosition();
-        //mAdapter = new HistoryAdapter(mMoodListItems);
-        mMoodListItems.add(mPosition, new MoodAndCommentItem(myPosition));
-        //mAdapter.notifyItemInserted(mPosition);
+    }
+
+    private void addToList () {
+
+
     }
 
     private void saveData() {
 
         SharedPreferences sharedPreferences = getSharedPreferences(SHARE_PREFERENCES, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        String myPosition = getCurrentPosition();
+
+        getTimeFromTheSystem();
+
         Gson gson = new Gson();
-        String json = gson.toJson(mMoodListItems);
+
+        List<GraphData> graphData = new ArrayList<>();
+        graphData.add(new GraphData(getCurrentPositionForGraphData(), getCurrentPosition()));
+        MoodAndCommentItem moodAndCommentItem = new MoodAndCommentItem(myPosition, formattedTime, mNewComment, graphData);
+        String json = gson.toJson(moodAndCommentItem);
+
         editor.putString(MOOD_LIST, json);
-        editor.apply();
+        editor.commit();
     }
 
     private void loadData() {
@@ -293,9 +324,10 @@ public class MainActivity extends AppCompatActivity {
         Gson gson = new Gson();
         SharedPreferences sharedPreferences = getSharedPreferences(SHARE_PREFERENCES, MODE_PRIVATE);
         String json = sharedPreferences.getString(MOOD_LIST, null);
-        Type type = new TypeToken<ArrayList<MoodAndCommentItem>>() {
-        }.getType();
-        mMoodListItems = gson.fromJson(json, type);
+
+       // MoodAndCommentItem[] moodAndCommentItems = gson.fromJson(json, MoodAndCommentItem[].class);
+
+        //mGraphData = gson.fromJson(json, moodAndCommentItems);
 
     }
 

@@ -4,16 +4,29 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import com.gacon.julien.moodtracker4.R;
+import com.gacon.julien.moodtracker4.models.GraphData;
 import com.gacon.julien.moodtracker4.models.MoodAndCommentItem;
 import com.github.mikephil.charting.charts.HorizontalBarChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineDataSet;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
+import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
@@ -23,16 +36,17 @@ import static com.gacon.julien.moodtracker4.controllers.activities.MainActivity.
 public class HistoryActivity extends AppCompatActivity {
 
     // data
-    private ArrayList mMoodListItems;
+    private ArrayList<GraphData> mGraphData;
     private int mPosition;
     SharedPreferences sharedPreferences;
     Gson gson;
 
     // graph
-    HorizontalBarChart mChart;
+    private HorizontalBarChart mChart;
     private static String GRAPH_TAG = "GRAPH_TAG";
-    private float[] xPosition = {};
-    private String[] ySize = {"mood", "mood"};
+    private static String JSON_STRING = "JSON_STRING";
+    private ArrayList<BarEntry> xSize;
+    private ArrayList<String> yPosition;
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -46,7 +60,7 @@ public class HistoryActivity extends AppCompatActivity {
         loadData();
 
         //buildRecyclerView();
-/*
+
         mChart = (HorizontalBarChart) findViewById(R.id.chart);
 
         mChart.animateXY(2000, 2000);
@@ -62,48 +76,65 @@ public class HistoryActivity extends AppCompatActivity {
         yl2.setDrawGridLines(false);
 
         addDataSet();
-*/
-       /* Data data = new Data(this);
-        String Date = data.getMoodPosition("comment");
-        String Mood = data.getComment("mood");
-        String Comment = data.getDate("time");
-        mMoodListItems.add(mPosition, new MoodAndCommentItem(Date, Mood, Comment));
-        mAdapter.notifyItemInserted(mPosition);
-        saveDataToGson();*/
 
     }
-
-    /*public void buildRecyclerView () {
-
-        //mRecyclerView = findViewById(R.id.recyclerView);
-        mRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(this);
-        mAdapter = new HistoryAdapter(mMoodListItems);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setAdapter(mAdapter);
-
-    }*/
 
     private void loadData() {
 
         Gson gson = new Gson();
-
-        if (mMoodListItems == null) {
-            mMoodListItems = new ArrayList<>();
-        }
         SharedPreferences sharedPreferences = getSharedPreferences(SHARE_PREFERENCES, MODE_PRIVATE);
         String json = sharedPreferences.getString(MOOD_LIST, null);
-        Type type = new TypeToken<ArrayList<MoodAndCommentItem>>() {
-        }.getType();
-        mMoodListItems = gson.fromJson(json, type);
+        //MoodAndCommentItem[] moodAndCommentItems = gson.fromJson(json, MoodAndCommentItem[].class);
+        //mGraphData = gson.fromJson(json, type);
 
     }
 
     private void addDataSet() {
 
-        loadData();
+        try {
+
+            Gson gson = new Gson();
+
+            String json = sharedPreferences.getString(MOOD_LIST, null);
+            GraphData[] graphData = gson.fromJson(json, GraphData[].class);
+
+            JSONObject data = (new JSONObject(JSON_STRING)).getJSONObject("Graph Data");
+            int value = data.getInt("Bar size");
+            String label = data.getString("Type of mood");
+
+            // graph
+            ArrayList<String> yEntrys = new ArrayList<String>();
+            ArrayList<BarEntry> xEntrys = new ArrayList<>();
+
+            for (int i = 0; i < data.length(); i++){
+
+                xEntrys.add(new BarEntry(value, i));
+                yPosition.add(label);
+
+            }
+
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+
+            // create the data set
+            BarDataSet dataSet = new BarDataSet(xSize, "Mood");
+
+            // colors
+            dataSet.setColors(getResources().getIntArray(R.array.colorPagesViewPager));
+
+            //create bar data object
+            BarData barData = new BarData(dataSet);
+            mChart.setData(barData);
+            mChart.invalidate();
+
+    }
 
 
+
+}
+
+        /*
 
         int size = mMoodListItems.size();
 
@@ -134,7 +165,6 @@ public class HistoryActivity extends AppCompatActivity {
             yEntrys.add(ySize[i]);
             }
 
-*/
         // create the data set
         BarDataSet dataSet = new BarDataSet(barEntries, "Mood");
 
@@ -147,7 +177,10 @@ public class HistoryActivity extends AppCompatActivity {
         mChart.invalidate();
 
     }
-}
+    */
+
+
+
 
 
 

@@ -1,23 +1,29 @@
 package com.gacon.julien.moodtracker4.models;
 import com.google.gson.annotations.SerializedName;
 
-public class MoodAndCommentItem {
-    private String mDate;
-    private String mMood;
-    private String mComment;
+import java.util.List;
 
-    public MoodAndCommentItem(String mood) {
-        //mDate = date;
+public class MoodAndCommentItem {
+    @SerializedName("Date")
+    private String mDate;
+    @SerializedName("Mood")
+    private String mMood;
+    @SerializedName("Comment")
+    private String mComment;
+    @SerializedName("Graph data")
+    private List<GraphData> mGraphData;
+
+    public MoodAndCommentItem(String mood, String date, String comment, List<GraphData> graphData) {
+        mDate = date;
         mMood = mood;
-        //mComment = comment;
+        mComment = comment;
+        mGraphData = graphData;
     }
 
-    @SerializedName("Date")
     public String getDate() {
         return mDate;
     }
 
-    @SerializedName("Moods")
     public String getMood() {
         return mMood;
     }
@@ -26,7 +32,6 @@ public class MoodAndCommentItem {
         mMood = mood;
     }
 
-    @SerializedName("Comment")
     public String getComment() {
         return mComment;
     }
