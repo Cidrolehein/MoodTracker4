@@ -16,8 +16,10 @@ import android.widget.EditText;
 
 import com.gacon.julien.moodtracker4.R;
 import com.gacon.julien.moodtracker4.adapters.PageAdapter;
-import com.gacon.julien.moodtracker4.models.GraphData;
-import com.gacon.julien.moodtracker4.models.MoodAndCommentItem;
+import com.gacon.julien.moodtracker4.models.Json.GraphData;
+import com.gacon.julien.moodtracker4.models.Json.Items;
+import com.gacon.julien.moodtracker4.models.Json.MoodAndCommentItem;
+import com.gacon.julien.moodtracker4.models.SharedPreferences.MySharedPreferences;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -31,16 +33,20 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
 
     private ArrayList<GraphData> mGraphData;
-    private int mPosition;
     private Gson gson;
     private String mNewComment = "No comment";
     private String formattedTime;
     int mCurrentPosition;
+    private int id = 1;
+
+    private ArrayList<MoodAndCommentItem> moodAndCommentItemList;
+    private int mPosition;
 
     private ViewPager pager;
 
     public static final String SHARE_PREFERENCES = "SHARE_PREFERENCES";
     public static final String MOOD_LIST = "MOOD_LIST";
+    MySharedPreferences sharedPreferences;
 
     private Button mNoteAddButton;
     private Button mHistoryButton;
@@ -64,6 +70,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        sharedPreferences = new MySharedPreferences(this);
 
         //3 - Configure ViewPager and Title
         this.configureViewPagerAndTitle();
@@ -113,7 +121,8 @@ public class MainActivity extends AppCompatActivity {
 
         // Récupération des anciens paramètres (shared preferences)
         {
-            loadData();
+
+            sharedPreferences.loadData();
 
         }
 
@@ -173,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
 
-        saveData();
+        sharedPreferences.saveData();
 
     }
 
@@ -296,39 +305,63 @@ public class MainActivity extends AppCompatActivity {
 
     private void addToList () {
 
-
-    }
-
-    private void saveData() {
-
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARE_PREFERENCES, MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
+        if (moodAndCommentItemList == null) {
+            moodAndCommentItemList = new ArrayList<>();
+        }
 
         String myPosition = getCurrentPosition();
 
         getTimeFromTheSystem();
 
-        Gson gson = new Gson();
+        //Items
+        List<Items> items = new ArrayList<>();
+        items.add(new Items(getTimeFromTheSystem(), myPosition, mNewComment));
 
+        //GraphData
         List<GraphData> graphData = new ArrayList<>();
         graphData.add(new GraphData(getCurrentPositionForGraphData(), getCurrentPosition()));
-        MoodAndCommentItem moodAndCommentItem = new MoodAndCommentItem(myPosition, formattedTime, mNewComment, graphData);
-        String json = gson.toJson(moodAndCommentItem);
+
+        //MoodList
+
+        moodAndCommentItemList = sharedPreferences.getMoodAndCommentItemList();
+        moodAndCommentItemList.add(mPosition, new MoodAndCommentItem(graphData, items));
+
+        sharedPreferences.setMoodAndCommentItemList(moodAndCommentItemList);
+
+    }
+
+   /* private void saveData() {
+
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARE_PREFERENCES, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        Gson gson = new Gson();
+
+        //To Json
+        String json = gson.toJson(moodAndCommentItemList);
 
         editor.putString(MOOD_LIST, json);
         editor.commit();
+
     }
 
     private void loadData() {
 
+        if (moodAndCommentItemList == null) {
+            moodAndCommentItemList = new ArrayList<>();
+        }
+
         Gson gson = new Gson();
         SharedPreferences sharedPreferences = getSharedPreferences(SHARE_PREFERENCES, MODE_PRIVATE);
         String json = sharedPreferences.getString(MOOD_LIST, null);
-
+        Type type = new TypeToken<ArrayList<MoodAndCommentItem>>() {
+        }.getType();
+        //ArrayList<MoodAndCommentItem> moodAndCommentItemArrayList = gson.fromJson(json, type);
+        moodAndCommentItemList = gson.fromJson(json, type);
        // MoodAndCommentItem[] moodAndCommentItems = gson.fromJson(json, MoodAndCommentItem[].class);
 
         //mGraphData = gson.fromJson(json, moodAndCommentItems);
 
-    }
+    }*/
 
 }

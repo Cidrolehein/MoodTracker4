@@ -1,11 +1,32 @@
-{
-  "Comment": "No comment",
-  "Date": "Jul 30, 2018 5:32:51 AM",
-  "Graph data": [
-    {
-      "Bar size": 4.0,
-      "Type of mood": "Happy Mood"
-    }
-  ],
-  "Mood": "Happy Mood"
-}
+[
+  {
+    "Graph data": [
+      {
+        "Bar size": 4.0,
+        "Type of mood": "Happy Mood"
+      }
+    ],
+    "items": [
+      {
+        "Comment": "No comment",
+        "Date": "Aug 1, 2018 4:48:43 PM",
+        "Mood": "Happy Mood"
+      }
+    ]
+  },
+  {
+    "Graph data": [
+      {
+        "Bar size": 4.0,
+        "Type of mood": "Happy Mood"
+      }
+    ],
+    "items": [
+      {
+        "Comment": "No comment",
+        "Date": "Aug 1, 2018 4:44:44 PM",
+        "Mood": "Happy Mood"
+      }
+    ]
+  }
+]
