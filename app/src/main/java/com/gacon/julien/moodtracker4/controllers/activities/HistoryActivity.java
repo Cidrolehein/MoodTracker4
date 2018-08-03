@@ -22,6 +22,8 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import static com.gacon.julien.moodtracker4.controllers.activities.MainActivity.MOOD_LIST;
 import static com.gacon.julien.moodtracker4.controllers.activities.MainActivity.SHARE_PREFERENCES;
@@ -38,8 +40,8 @@ public class HistoryActivity extends AppCompatActivity {
     private HorizontalBarChart mChart;
     private static String GRAPH_TAG = "GRAPH_TAG";
     private static String JSON_STRING = "JSON_STRING";
-    private ArrayList<BarEntry> xSize;
-    private ArrayList<String> yPosition;
+    private ArrayList<BarEntry> x;
+    private ArrayList<String> y;
     private float value;
     private String label;
     //private JSONArray jsonArray;
@@ -47,16 +49,18 @@ public class HistoryActivity extends AppCompatActivity {
     JSONArray jsonArray;
     int size;
 
+    ArrayList<String> yEntrys = new ArrayList<String>();
+    ArrayList<BarEntry> xEntrys = new ArrayList<>();
+
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private List<HashMap<String, String>> mylist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
-
-        loadData();
 
         mChart = (HorizontalBarChart) findViewById(R.id.chart);
 
@@ -72,6 +76,8 @@ public class HistoryActivity extends AppCompatActivity {
         YAxis yl2 = mChart.getAxisRight();
         yl2.setDrawGridLines(false);
 
+        loadData();
+
         addDataSet();
 
     }
@@ -82,19 +88,21 @@ public class HistoryActivity extends AppCompatActivity {
         String json = sharedPreferences.getString(MOOD_LIST, null);
 
         try {
-            //jsonObject = new JSONObject(json);
 
             jsonArray = new JSONArray(json);
-            jsonArray = jsonObject.getJSONArray("Graph data");
-            JSONObject jsonObject = jsonArray.getJSONObject(0);
-            label = jsonObject.getString("Type of mood");
-            value = Float.valueOf(jsonObject.getString("Bar size"));
-            size = jsonArray.length();
-            System.out.println(value);
 
-            //Type type = new TypeToken<ArrayList<DataId>>() {
-            //}.getType();
-            //mMoodListItems = gson.fromJson(json, type);
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject e = jsonArray.getJSONObject(i);
+                    JSONArray graph = e.getJSONArray("Graph data");
+                    JSONObject graphItems = graph.getJSONObject(i);
+                    String label = graphItems.getString("Type of mood");
+                    int value = graphItems.getInt("Bar size");
+
+                    // graph
+
+                    xEntrys.add(new BarEntry(value, i));
+                    yEntrys.add(label);
+                }
 
         }catch (Exception e) {
             e.printStackTrace();
@@ -104,33 +112,17 @@ public class HistoryActivity extends AppCompatActivity {
 
     private void addDataSet() {
 
-        // graph
-        ArrayList<String> yEntrys = new ArrayList<String>();
-        ArrayList<BarEntry> xEntrys = new ArrayList<>();
+        // create the data set
 
-        try {
+        BarDataSet dataSet = new BarDataSet(xEntrys, "Mood");
 
-            for (int i = 0; i < size; i++){
+        // colors
+        dataSet.setColors(getResources().getIntArray(R.array.colorPagesViewPager));
 
-                xEntrys.add(new BarEntry(value, i));
-                yEntrys.add(label);
-
-            }
-
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
-
-            // create the data set
-            BarDataSet dataSet = new BarDataSet(xEntrys, "Mood");
-
-            // colors
-            dataSet.setColors(getResources().getIntArray(R.array.colorPagesViewPager));
-
-            //create bar data object
-            BarData barData = new BarData(dataSet);
-            mChart.setData(barData);
-            mChart.invalidate();
+        //create bar data object
+        BarData barData = new BarData(dataSet);
+        mChart.setData(barData);
+        mChart.invalidate();
 
     }
 
