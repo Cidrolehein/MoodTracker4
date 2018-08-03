@@ -12,7 +12,6 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.util.ArrayList;
@@ -95,7 +94,7 @@ public class HistoryActivity extends AppCompatActivity {
         left.setDrawZeroLine(true); // draw a zero line
         mChart.getAxisRight().setEnabled(false); // no right axis
 
-        // data has AxisDependency.LEFT
+        // data has AxisDependency.RIGHT
         XAxis right = mChart.getXAxis();
         right.setDrawLabels(false); // no axis labels
         right.setDrawAxisLine(false); // no axis line
