@@ -3,82 +3,39 @@ package com.gacon.julien.moodtracker4.controllers.activities;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 
 import com.gacon.julien.moodtracker4.R;
-import com.gacon.julien.moodtracker4.models.Json.GraphData;
-import com.gacon.julien.moodtracker4.models.Json.MoodAndCommentItem;
 import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 import static com.gacon.julien.moodtracker4.controllers.activities.MainActivity.MOOD_LIST;
 import static com.gacon.julien.moodtracker4.controllers.activities.MainActivity.SHARE_PREFERENCES;
 
 public class HistoryActivity extends AppCompatActivity {
 
-    // data
-    private ArrayList<GraphData> mGraphData;
-    private int mPosition;
-    SharedPreferences sharedPreferences;
-    Gson gson;
-
     // graph
     private HorizontalBarChart mChart;
-    private static String GRAPH_TAG = "GRAPH_TAG";
-    private static String JSON_STRING = "JSON_STRING";
-    private ArrayList<BarEntry> x;
-    private ArrayList<String> y;
-    private float value;
-    private String label;
-    //private JSONArray jsonArray;
-    private JSONObject jsonObject;
     JSONArray jsonArray;
-    int size;
 
-    ArrayList<String> yEntrys = new ArrayList<String>();
-    ArrayList<BarEntry> xEntrys = new ArrayList<>();
-
-    private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
-    private List<HashMap<String, String>> mylist;
+    ArrayList<BarEntry> yEntrys = new ArrayList<BarEntry>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
 
-        mChart = (HorizontalBarChart) findViewById(R.id.chart);
-
-        mChart.animateXY(2000, 2000);
-
-        // remove grid lines
-        XAxis xl = mChart.getXAxis();
-        xl.setDrawGridLines(false);
-
-        YAxis yl = mChart.getAxisLeft();
-        yl.setDrawGridLines(false);
-
-        YAxis yl2 = mChart.getAxisRight();
-        yl2.setDrawGridLines(false);
+        graphConfig();
 
         loadData();
-
-        addDataSet();
 
     }
 
@@ -90,18 +47,32 @@ public class HistoryActivity extends AppCompatActivity {
         try {
 
             jsonArray = new JSONArray(json);
+            float spaceForBar = 10f;
 
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject e = jsonArray.getJSONObject(i);
-                    JSONArray graph = e.getJSONArray("Graph data");
-                    JSONObject graphItems = graph.getJSONObject(i);
-                    String label = graphItems.getString("Type of mood");
-                    int value = graphItems.getInt("Bar size");
+                    String label = e.getString("Type of mood");
+                    int value = e.getInt("Bar size");
+
+                    int id = i++;
 
                     // graph
 
-                    xEntrys.add(new BarEntry(value, i));
-                    yEntrys.add(label);
+                    yEntrys.add(new BarEntry(i*spaceForBar, value));
+
+                    // create the data set
+                    BarDataSet dataSet = new BarDataSet(yEntrys, "Mood");
+
+                    // colors
+                    dataSet.setColors(getResources().getIntArray(R.array.colorPagesViewPager));
+
+                    //create bar data object
+                    BarData barData = new BarData(dataSet);
+
+                    barData.setBarWidth(9f);
+
+                    mChart.setData(barData);
+                    mChart.invalidate();
                 }
 
         }catch (Exception e) {
@@ -110,19 +81,26 @@ public class HistoryActivity extends AppCompatActivity {
 
     }
 
-    private void addDataSet() {
+    private void graphConfig() {
 
-        // create the data set
+        mChart = (HorizontalBarChart) findViewById(R.id.chart);
 
-        BarDataSet dataSet = new BarDataSet(xEntrys, "Mood");
+        mChart.animateXY(2000, 2000);
 
-        // colors
-        dataSet.setColors(getResources().getIntArray(R.array.colorPagesViewPager));
+        // data has AxisDependency.LEFT
+        YAxis left = mChart.getAxisLeft();
+        left.setDrawLabels(false); // no axis labels
+        left.setDrawAxisLine(false); // no axis line
+        left.setDrawGridLines(false); // no grid lines
+        left.setDrawZeroLine(true); // draw a zero line
+        mChart.getAxisRight().setEnabled(false); // no right axis
 
-        //create bar data object
-        BarData barData = new BarData(dataSet);
-        mChart.setData(barData);
-        mChart.invalidate();
+        // data has AxisDependency.LEFT
+        XAxis right = mChart.getXAxis();
+        right.setDrawLabels(false); // no axis labels
+        right.setDrawAxisLine(false); // no axis line
+        right.setDrawGridLines(false); // no grid lines
+        mChart.getAxisLeft().setEnabled(false); // no right axis
 
     }
 

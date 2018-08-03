@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     int mCurrentPosition;
     private int id = 1;
 
-    private ArrayList<MoodAndCommentItem> moodAndCommentItemList;
+    private ArrayList<GraphData> moodAndCommentItemList;
     private int mPosition;
 
     private ViewPager pager;
@@ -310,58 +310,25 @@ public class MainActivity extends AppCompatActivity {
         }
 
         String myPosition = getCurrentPosition();
+        Float positionForData = getCurrentPositionForGraphData();
 
         getTimeFromTheSystem();
 
         //Items
-        List<Items> items = new ArrayList<>();
-        items.add(new Items(getTimeFromTheSystem(), myPosition, mNewComment));
+        //List<Items> items = new ArrayList<>();
+        //items.add(new Items(getTimeFromTheSystem(), myPosition, mNewComment));
 
         //GraphData
-        List<GraphData> graphData = new ArrayList<>();
-        graphData.add(new GraphData(getCurrentPositionForGraphData(), getCurrentPosition()));
+        //List<GraphData> graphData = new ArrayList<>();
+        //graphData.add(new GraphData(getCurrentPositionForGraphData(), getCurrentPosition()));
 
         //MoodList
 
         moodAndCommentItemList = sharedPreferences.getMoodAndCommentItemList();
-        moodAndCommentItemList.add(mPosition, new MoodAndCommentItem(graphData, items));
+        moodAndCommentItemList.add(mPosition, new GraphData(positionForData, myPosition));
 
         sharedPreferences.setMoodAndCommentItemList(moodAndCommentItemList);
 
     }
-
-   /* private void saveData() {
-
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARE_PREFERENCES, MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        Gson gson = new Gson();
-
-        //To Json
-        String json = gson.toJson(moodAndCommentItemList);
-
-        editor.putString(MOOD_LIST, json);
-        editor.commit();
-
-    }
-
-    private void loadData() {
-
-        if (moodAndCommentItemList == null) {
-            moodAndCommentItemList = new ArrayList<>();
-        }
-
-        Gson gson = new Gson();
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARE_PREFERENCES, MODE_PRIVATE);
-        String json = sharedPreferences.getString(MOOD_LIST, null);
-        Type type = new TypeToken<ArrayList<MoodAndCommentItem>>() {
-        }.getType();
-        //ArrayList<MoodAndCommentItem> moodAndCommentItemArrayList = gson.fromJson(json, type);
-        moodAndCommentItemList = gson.fromJson(json, type);
-       // MoodAndCommentItem[] moodAndCommentItems = gson.fromJson(json, MoodAndCommentItem[].class);
-
-        //mGraphData = gson.fromJson(json, moodAndCommentItems);
-
-    }*/
 
 }

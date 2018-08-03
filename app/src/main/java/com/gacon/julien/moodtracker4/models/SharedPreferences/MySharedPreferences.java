@@ -2,6 +2,7 @@ package com.gacon.julien.moodtracker4.models.SharedPreferences;
 
 import android.content.Context;
 
+import com.gacon.julien.moodtracker4.models.Json.GraphData;
 import com.gacon.julien.moodtracker4.models.Json.MoodAndCommentItem;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -17,7 +18,7 @@ public class MySharedPreferences {
 
     private static Context context;
 
-    private ArrayList<MoodAndCommentItem> moodAndCommentItemList;
+    private ArrayList<GraphData> moodAndCommentItemList;
 
     public MySharedPreferences (Context context) {
         this.context = context;
@@ -43,17 +44,17 @@ public class MySharedPreferences {
         Gson gson = new Gson();
         android.content.SharedPreferences sharedPreferences = context.getSharedPreferences(SHARE_PREFERENCES, 0);
         String json = sharedPreferences.getString(MOOD_LIST, null);
-        Type type = new TypeToken<ArrayList<MoodAndCommentItem>>() {
+        Type type = new TypeToken<ArrayList<GraphData>>() {
         }.getType();
         moodAndCommentItemList = gson.fromJson(json, type);
         int i = 1;
     }
 
-    public void setMoodAndCommentItemList(ArrayList<MoodAndCommentItem> moodAndCommentItemList) {
+    public void setMoodAndCommentItemList(ArrayList<GraphData> moodAndCommentItemList) {
         this.moodAndCommentItemList = moodAndCommentItemList;
     }
 
-    public ArrayList<MoodAndCommentItem> getMoodAndCommentItemList() {
+    public ArrayList<GraphData> getMoodAndCommentItemList() {
         return moodAndCommentItemList;
     }
 
