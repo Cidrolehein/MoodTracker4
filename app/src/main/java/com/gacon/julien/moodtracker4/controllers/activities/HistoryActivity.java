@@ -1,16 +1,19 @@
 package com.gacon.julien.moodtracker4.controllers.activities;
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.gacon.julien.moodtracker4.R;
 import com.github.mikephil.charting.charts.HorizontalBarChart;
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -23,13 +26,22 @@ public class HistoryActivity extends AppCompatActivity {
 
     // graph
     private HorizontalBarChart mChart;
-    JSONArray jsonArray;
+    private JSONArray jsonArray;
+    int count;
+    int nbrOfMood = 7;
+    float spaceForBar = 5f;
+
+    //labels
+    // Look-up table
+    final String[] weekdays = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
 
     ArrayList<BarEntry> yEntrys = new ArrayList<BarEntry>();
+    ArrayList<String> labelList = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_history);
 
         graphConfig();
@@ -44,20 +56,17 @@ public class HistoryActivity extends AppCompatActivity {
         String json = sharedPreferences.getString(MOOD_LIST, null);
 
         try {
-
             jsonArray = new JSONArray(json);
-            float spaceForBar = 10f;
+            count = jsonArray.length();
 
-                for (int i = 0; i < jsonArray.length(); i++) {
+                for (int i = 0; i < count; i++) {
                     JSONObject e = jsonArray.getJSONObject(i);
                     String label = e.getString("Type of mood");
                     int value = e.getInt("Bar size");
 
-                    int id = i++;
-
                     // graph
 
-                    yEntrys.add(new BarEntry(i*spaceForBar, value));
+                    yEntrys.add(new BarEntry((nbrOfMood - i) * spaceForBar - 3f, value));
 
                     // create the data set
                     BarDataSet dataSet = new BarDataSet(yEntrys, "Mood");
@@ -68,7 +77,16 @@ public class HistoryActivity extends AppCompatActivity {
                     //create bar data object
                     BarData barData = new BarData(dataSet);
 
-                    barData.setBarWidth(9f);
+                    barData.setBarWidth(5f);
+
+                    // Set the value formatter
+                    XAxis right = mChart.getXAxis();
+                    right.setValueFormatter(new IndexAxisValueFormatter(weekdays));
+                    right.setPosition(XAxis.XAxisPosition.BOTTOM_INSIDE);
+                    right.setTextSize(15f);
+                    right.setTextColor(Color.RED);
+                    right.setDrawAxisLine(true);
+                    right.setDrawGridLines(false);
 
                     mChart.setData(barData);
                     mChart.invalidate();
@@ -84,7 +102,22 @@ public class HistoryActivity extends AppCompatActivity {
 
         mChart = (HorizontalBarChart) findViewById(R.id.chart);
 
+        //Legend
+        Legend legend = mChart.getLegend();
+        legend.setEnabled(false);
+        mChart.getDescription().setEnabled(false);
+
+        //Animation
         mChart.animateXY(2000, 2000);
+
+        //General configuration
+        mChart.setBackgroundColor(Color.LTGRAY);
+        mChart.setTouchEnabled(true);
+        mChart.setDragEnabled(true);
+        mChart.setScaleEnabled(true);
+        mChart.setDrawValueAboveBar(true);
+
+        //mChart.getLayoutParams().height=500*35;
 
         // data has AxisDependency.LEFT
         YAxis left = mChart.getAxisLeft();
@@ -93,67 +126,25 @@ public class HistoryActivity extends AppCompatActivity {
         left.setDrawGridLines(false); // no grid lines
         left.setDrawZeroLine(true); // draw a zero line
         mChart.getAxisRight().setEnabled(false); // no right axis
+        mChart.setScaleYEnabled(true); // Y scaling
 
         // data has AxisDependency.RIGHT
         XAxis right = mChart.getXAxis();
-        right.setDrawLabels(false); // no axis labels
+        right.setAxisMaximum(nbrOfMood * spaceForBar);
+
+
+        right.setAxisMinimum(0f);
+        right.setDrawLabels(true); // no axis labels
         right.setDrawAxisLine(false); // no axis line
         right.setDrawGridLines(false); // no grid lines
         mChart.getAxisLeft().setEnabled(false); // no right axis
+        mChart.setScaleXEnabled(false); // no X scaling
 
     }
+
+
 
 }
-
-        /*
-
-        int size = mMoodListItems.size();
-
-        ArrayList<BarEntry> barEntries = new ArrayList<>();
-
-        ArrayList<Float> floats = new ArrayList<Float>();
-
-        for (int i = 0; i < size; i ++){
-
-            float floatMood = floats.get(i);
-
-            barEntries.add(new BarEntry(i, floatMood));
-        }
-
-
-/*
-        // graph
-        ArrayList<String> yEntrys = new ArrayList<String>();
-        ArrayList<BarEntry> xEntrys = new ArrayList<>();
-
-        System.out.println(size);
-
-            for (int i = 0; i < size; i++){
-                xEntrys.add(new BarEntry(xPosition[i], i));
-        }
-
-        for (int i = 0; i < ySize.length; i++){
-            yEntrys.add(ySize[i]);
-            }
-
-        // create the data set
-        BarDataSet dataSet = new BarDataSet(barEntries, "Mood");
-
-        // colors
-        dataSet.setColors(getResources().getIntArray(R.array.colorPagesViewPager));
-
-        //create bar data object
-        BarData barData = new BarData(dataSet);
-        mChart.setData(barData);
-        mChart.invalidate();
-
-    }
-    */
-
-
-
-
-
 
 
 

@@ -47,7 +47,11 @@ public class MySharedPreferences {
         Type type = new TypeToken<ArrayList<GraphData>>() {
         }.getType();
         moodAndCommentItemList = gson.fromJson(json, type);
-        int i = 1;
+
+        if (moodAndCommentItemList == null) {
+            moodAndCommentItemList = new ArrayList<>();
+        }
+
     }
 
     public void setMoodAndCommentItemList(ArrayList<GraphData> moodAndCommentItemList) {

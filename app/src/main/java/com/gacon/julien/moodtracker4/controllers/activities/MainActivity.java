@@ -1,10 +1,7 @@
 package com.gacon.julien.moodtracker4.controllers.activities;
 
-
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -13,21 +10,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-
 import com.gacon.julien.moodtracker4.R;
 import com.gacon.julien.moodtracker4.adapters.PageAdapter;
 import com.gacon.julien.moodtracker4.models.Json.GraphData;
-import com.gacon.julien.moodtracker4.models.Json.Items;
-import com.gacon.julien.moodtracker4.models.Json.MoodAndCommentItem;
 import com.gacon.julien.moodtracker4.models.SharedPreferences.MySharedPreferences;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
@@ -51,8 +41,6 @@ public class MainActivity extends AppCompatActivity {
     private Button mNoteAddButton;
     private Button mHistoryButton;
     private EditText mEditTextComment;
-
-    //private SharedPreferences sharedPreferences;
 
     // Image Mood list
     private int[] imageMoods = new int[]{
@@ -108,7 +96,6 @@ public class MainActivity extends AppCompatActivity {
         super.onRestart();
 
     }
-
 
     /**
      * Exécuté lorsque l'activité devient visible à l'utilisateur.
