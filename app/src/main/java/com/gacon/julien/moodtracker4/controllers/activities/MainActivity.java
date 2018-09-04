@@ -20,24 +20,23 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
+/**
+ * Main Activity
+ */
+
+// MainActivity class
+
 public class MainActivity extends AppCompatActivity {
 
-    private ArrayList<GraphData> mGraphData;
-    private Gson gson;
-    private String mNewComment = "No comment";
-    private String formattedTime;
+    // Main Activity variables
+
+    private String mNewComment = "No comment"; // default comment
+    private String formattedTime; // time
     int mCurrentPosition;
     private int id = 1;
-
-    private ArrayList<GraphData> moodAndCommentItemList;
     private int mPosition;
-
-    private ViewPager pager;
-
-    public static final String SHARE_PREFERENCES = "SHARE_PREFERENCES";
-    public static final String MOOD_LIST = "MOOD_LIST";
-    MySharedPreferences sharedPreferences;
-
+    private ViewPager pager; // viewpager for swiping
+    MySharedPreferences sharedPreferences; // shared preferences
     private Button mNoteAddButton;
     private Button mHistoryButton;
     private EditText mEditTextComment;
@@ -49,17 +48,19 @@ public class MainActivity extends AppCompatActivity {
             R.drawable.smiley_normal,
             R.drawable.smiley_happy,
             R.drawable.smiley_super_happy
-    };
+    }; // end of image mood list
 
-    public MainActivity() {
-    }
+    /**
+     * MainActivity methods
+     */
 
+    // MainActivity onCreate
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        sharedPreferences = new MySharedPreferences(this);
+        sharedPreferences = new MySharedPreferences(this); // initialize SharedPreferences
 
         //3 - Configure ViewPager and Title
         this.configureViewPagerAndTitle();
@@ -144,7 +145,6 @@ public class MainActivity extends AppCompatActivity {
         // Sauvegarde des paramètres
         // pour pouvoir les restaurer au prochain démarrage
         {
-            addToList();
 
         }
 
@@ -242,80 +242,4 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private String getCurrentPosition() {
-
-        mCurrentPosition = pager.getCurrentItem();
-
-        // Get Current Position for Mood selected
-
-        switch (mCurrentPosition) {
-            case 0:
-                return "Sad Mood";
-            case 1:
-                return "Disapointed Mood";
-            case 2:
-                return "Normal Mood";
-            case 3:
-                return "Happy Mood";
-            case 4:
-                return "Super Happy Mood";
-            default:
-                return null;
-
-        }
-
-    }
-
-    private Float getCurrentPositionForGraphData() {
-
-        mCurrentPosition = pager.getCurrentItem();
-
-        // Get Current Position for Graph Data Size
-
-        switch (mCurrentPosition) {
-            case 0:
-                return 1f;
-            case 1:
-                return 2f;
-            case 2:
-                return 3f;
-            case 3:
-                return 4f;
-            case 4:
-                return 5f;
-            default:
-                return null;
-
-        }
-
-    }
-
-    private void addToList () {
-
-        if (moodAndCommentItemList == null) {
-            moodAndCommentItemList = new ArrayList<>();
-        }
-
-        String myPosition = getCurrentPosition();
-        Float positionForData = getCurrentPositionForGraphData();
-
-        getTimeFromTheSystem();
-
-        //Items
-        //List<Items> items = new ArrayList<>();
-        //items.add(new Items(getTimeFromTheSystem(), myPosition, mNewComment));
-
-        //GraphData
-        //List<GraphData> graphData = new ArrayList<>();
-        //graphData.add(new GraphData(getCurrentPositionForGraphData(), getCurrentPosition()));
-
-        //MoodList
-
-        moodAndCommentItemList = sharedPreferences.getMoodAndCommentItemList();
-        moodAndCommentItemList.add(mPosition, new GraphData(positionForData, myPosition));
-
-        sharedPreferences.setMoodAndCommentItemList(moodAndCommentItemList);
-
-    }
-
-}
+} // end of MainActivity class
