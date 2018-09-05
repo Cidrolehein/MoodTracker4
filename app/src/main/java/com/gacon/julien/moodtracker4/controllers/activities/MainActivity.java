@@ -12,34 +12,42 @@ import android.widget.Button;
 import android.widget.EditText;
 import com.gacon.julien.moodtracker4.R;
 import com.gacon.julien.moodtracker4.adapters.PageAdapter;
-import com.gacon.julien.moodtracker4.models.Json.GraphData;
+import com.gacon.julien.moodtracker4.models.Json.HistoryItem;
 import com.gacon.julien.moodtracker4.models.SharedPreferences.MySharedPreferences;
-import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
-/**
+/********************************************************************************
+ * MoodTracker by Julien Gacon for OpenClassRooms - 2018
  * Main Activity
+ ********************************************************************************/
+
+/**
+ * TODO : manage current position with mood items - add sound
  */
 
 // MainActivity class
 
 public class MainActivity extends AppCompatActivity {
 
-    // Main Activity variables
+    /********************************************************************************
+     * MainActivity variables
+     ********************************************************************************/
 
     private String mNewComment = "No comment"; // default comment
     private String formattedTime; // time
-    int mCurrentPosition;
-    private int id = 1;
-    private int mPosition;
+    ArrayList<HistoryItem> arrayList; // history list
     private ViewPager pager; // viewpager for swiping
     MySharedPreferences sharedPreferences; // shared preferences
-    private Button mNoteAddButton;
-    private Button mHistoryButton;
-    private EditText mEditTextComment;
+    private Button mNoteAddButton; // note button
+    private Button mHistoryButton; // history button
+    private EditText mEditTextComment; // edit text for comment
+
+    /**
+     * Array of mood items
+     */
 
     // Image Mood list
     private int[] imageMoods = new int[]{
@@ -50,9 +58,9 @@ public class MainActivity extends AppCompatActivity {
             R.drawable.smiley_super_happy
     }; // end of image mood list
 
-    /**
-     * MainActivity methods
-     */
+    /********************************************************************************
+     * MainActivity Life Cycle
+     ********************************************************************************/
 
     // MainActivity onCreate
     @Override
@@ -62,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
 
         sharedPreferences = new MySharedPreferences(this); // initialize SharedPreferences
 
-        //3 - Configure ViewPager and Title
+        // Configure ViewPager and Title
         this.configureViewPagerAndTitle();
 
         mNoteAddButton = (Button) findViewById(R.id.ic_note_add_black);
@@ -71,175 +79,201 @@ public class MainActivity extends AppCompatActivity {
         mNoteAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openDialog();
+
+                createAlertDialog(); // comment alertDialog
 
             }
-        });
+        }); // add comment
 
+        // Open History Activity
         mHistoryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent historyActivityIntent = new Intent(MainActivity.this, HistoryActivity.class);
                 startActivity(historyActivityIntent);
 
-            }
+            } //end of onClick method
         });
 
-    }
+    } // end of OnCreate method
 
     /**
-     * Exécuté que l'activité arrêtée via un "stop" redémarre.
-     *
-     * La fonction onRestart() est suivie de la fonction onStart().
+     * Restart Activity
      */
+
     @Override
     protected void onRestart() {
         super.onRestart();
 
-    }
+    } // end of onRestart method
 
     /**
-     * Exécuté lorsque l'activité devient visible à l'utilisateur.
-     *
-     * La fonction onStart() est suivie de la fonction onResume().
+     * Start Activity
+     * Load data from Shared Preferences
      */
+
     @Override
     protected void onStart() {
         super.onStart();
 
-        // Récupération des anciens paramètres (shared preferences)
-        {
+            sharedPreferences.loadData(); // load data from sharedPreferences
 
-            sharedPreferences.loadData();
-
-        }
-
-    }
+    } // end of onStart method
 
     /**
-     * Exécutée a chaque passage en premier plan de l'activité.
-     * Ou bien, si l'activité passe à nouveau en premier (si une autre activité était passé en premier plan entre temps).
-     *
-     * La fonction onResume() est suivie de l'exécution de l'activité.
+     * OnResume activity
      */
     @Override
     protected void onResume() {
         super.onResume();
 
 
-    }
+    } // end of onResume method
 
     /**
-     * La fonction onPause() est suivie :
-     * - d'un onResume() si l'activité passe à nouveau en premier plan
-     * - d'un onStop() si elle devient invisible à l'utilisateur
-     *
-     * L'exécution de la fonction onPause() doit être rapide,
-     * car la prochaine activité ne démarrera pas tant que l'exécution
-     * de la fonction onPause() n'est pas terminée.
+     * Activity on Pause method
+     * Add data to shared preferences
      */
+
     @Override
     protected void onPause() {
         super.onPause();
 
-        // Sauvegarde des paramètres
-        // pour pouvoir les restaurer au prochain démarrage
-        {
+        addToList(); // add data to SharedPreferences
 
-        }
-
-        if (isFinishing()) { // "onPause, l'utilisateur à demandé la fermeture via un finish()"
+        // condition
+        if (isFinishing()) { // user call finish to pause Activity
 
 
-        } else { // "onPause, l'utilisateur n'a pas demandé la fermeture via un finish()"
+        } else { // user don't call finish
 
-        }
-    }
+        } // end of condition
+
+    } // end of onPause method
 
     /**
-     * La fonction onStop() est exécutée :
-     * - lorsque l'activité n'est plus en premier plan
-     * - ou bien lorsque l'activité va être détruite
-     *
-     * Cette fonction est suivie :
-     * - de la fonction onRestart() si l'activité passe à nouveau en premier plan
-     * - de la fonction onDestroy() lorsque l'activité se termine ou bien lorsque le système décide de l'arrêter
+     * Activity on stop method
+     * save Shared Preferences
      */
+
     @Override
     protected void onStop() {
         super.onStop();
 
-        sharedPreferences.saveData();
+        sharedPreferences.saveData(); // save shared preferences
 
-    }
+    } // end of on stop method
+
+    /**
+     * Destroy activity
+     */
 
     @Override
     protected void onDestroy(){
         super.onDestroy();
 
-    }
+    } // end of onDestroy method
 
-    private void openDialog() {
 
-        createAlertDialog();
-    }
+    /********************************************************************************
+     * MainActivity methods
+     ********************************************************************************/
+
+    /**
+     * View
+     */
 
     // New vertical ViewPager with Adapter
-
     private void configureViewPagerAndTitle() {
 
-        // 1 - Get ViewPager from layout
+        // Get ViewPager from layout
         pager = (ViewPager)findViewById(R.id.vertical_viewpager);
 
-        // 2 - Set Adapter PageAdapter and glue it together
+        // Set Adapter PageAdapter and glue it together
         pager.setAdapter(new PageAdapter(getSupportFragmentManager(), this.imageMoods, getResources().getIntArray(R.array.colorPagesViewPager)) {
         });
 
-        //Set default position
+        // Set default position
         pager.setCurrentItem(3);
 
-    }
+    } // end of configureViewPagerAndTitle method
 
+    // Alert Dialog for new comment
     private void createAlertDialog() {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this); // get context
 
-        LayoutInflater inflater = this.getLayoutInflater();
-        View view = inflater.inflate(R.layout.layout_dialog, null);
+        LayoutInflater inflater = this.getLayoutInflater(); // add new layout
 
-        mEditTextComment = view.findViewById(R.id.edit_comment);
+        View view = inflater.inflate(R.layout.layout_dialog, null); // initialize view
 
+        mEditTextComment = view.findViewById(R.id.edit_comment); // refer view
+
+        // view builder
         builder.setView(view)
-                .setTitle("Commentaire")
+                .setTitle("Commentaire") // title
+                // add cancel button
                 .setNegativeButton("ANNULER", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
                     }
-                })
+                }) // end of cancel button method
+                // add OK button
                 .setPositiveButton("VALIDER", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         mNewComment = mEditTextComment.getText().toString();
 
                     }
-                })
-                .create()
-                .show();
+                }) // end of OK button method
+                .create() // create view
+                .show(); // show
 
-    }
+    } // end of AlertDialog method
 
+    /**
+     * data
+     */
+
+    // time
     private String getTimeFromTheSystem() {
 
-        Locale locale = Locale.getDefault();
-        Calendar cal = new GregorianCalendar();
+        Locale locale = Locale.getDefault(); // get local time (phone)
+        Calendar cal = new GregorianCalendar(); // initialize calendar
         cal.getInstance(locale);
-        cal.getTime().toLocaleString();
+        cal.getTime().toLocaleString(); // time to string
 
-        formattedTime = cal.getTime().toLocaleString();
+        formattedTime = cal.getTime().toLocaleString(); // variable
 
         return formattedTime;
 
-    }
+    } // end of Time method
+
+    /**
+     * History List add new items
+     */
+
+    // add to History List
+    private void addToList() {
+
+        // ! condition
+    if (arrayList == null) {
+        arrayList = new ArrayList<>();
+    } // end of condition
+
+    getTimeFromTheSystem(); // get current time
+
+    arrayList = sharedPreferences.getHistoryList(); // get history list
+    arrayList.add(new HistoryItem(R.drawable.smiley_normal, formattedTime, mNewComment)); // add to list
+
+    sharedPreferences.setHistoryList(arrayList); // save data
+
+    } // end of addToList method
 
 } // end of MainActivity class
+
+/********************************************************************************
+ * Thank you !
+ * More information >>> juliengacon@gmail.com <<<
+ ********************************************************************************/
