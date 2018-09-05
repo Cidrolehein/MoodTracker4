@@ -25,7 +25,7 @@ import java.util.Locale;
  ********************************************************************************/
 
 /**
- * TODO : manage current position with mood items - add sound
+ * TODO : manage current position with mood items - add sound - change current position
  */
 
 // MainActivity class
@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private Button mNoteAddButton; // note button
     private Button mHistoryButton; // history button
     private EditText mEditTextComment; // edit text for comment
+    int mCurrentPosition; // current position of mood
 
     /**
      * Array of mood items
@@ -251,6 +252,34 @@ public class MainActivity extends AppCompatActivity {
     } // end of Time method
 
     /**
+     * Get mood // current position
+     */
+
+    private int getCurrentMood() {
+
+        mCurrentPosition = pager.getCurrentItem();
+
+        // Get Current Position
+
+        switch (mCurrentPosition) {
+            case 0:
+                return R.drawable.smiley_sad;
+            case 1:
+                return R.drawable.smiley_disappointed;
+            case 2:
+                return R.drawable.smiley_normal;
+            case 3:
+                return R.drawable.smiley_happy;
+            case 4:
+                return R.drawable.smiley_super_happy;
+            default:
+                return R.drawable.smiley_happy;
+
+        } // end of condition
+
+    } // end of getCurrentMood method
+
+    /**
      * History List add new items
      */
 
@@ -265,7 +294,7 @@ public class MainActivity extends AppCompatActivity {
     getTimeFromTheSystem(); // get current time
 
     arrayList = sharedPreferences.getHistoryList(); // get history list
-    arrayList.add(new HistoryItem(R.drawable.smiley_normal, formattedTime, mNewComment)); // add to list
+    arrayList.add(new HistoryItem(getCurrentMood(), formattedTime, mNewComment)); // add to list
 
     sharedPreferences.setHistoryList(arrayList); // save data
 

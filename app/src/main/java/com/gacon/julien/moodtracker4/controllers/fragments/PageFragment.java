@@ -45,7 +45,6 @@ public class PageFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         // 3 - Get layout of PageFragment
-
         View result = inflater.inflate(R.layout.fragment_page, container, false);
 
         // 4 - Get widgets from layout and serialise it
