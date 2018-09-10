@@ -32,7 +32,6 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
     public static class HistoryViewHolder extends RecyclerView.ViewHolder {
 
         // HistoryViewHolder variables
-        public ImageView mImageView; // mood image
         public TextView mTextView1; // date
         public TextView mTextView2; // comment
         public RelativeLayout mRelativeLayout; // relative layout
@@ -40,7 +39,6 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
         // HistoryViewHolder constructor
         public HistoryViewHolder(View itemView) {
             super(itemView);
-            mImageView = itemView.findViewById(R.id.imageView);
             mTextView1 = itemView.findViewById(R.id.textView);
             mTextView2 = itemView.findViewById(R.id.textView2);
             mRelativeLayout = itemView.findViewById(R.id.relative_layout);
@@ -73,7 +71,6 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
     public void onBindViewHolder(@NonNull HistoryViewHolder holder, int position) {
         HistoryItem currentItem = mHistoryList.get(position);
 
-        holder.mImageView.setImageResource(currentItem.getImageResource()); // mood image
         holder.mTextView1.setText(currentItem.getText1()); // date
         holder.mTextView2.setText(currentItem.getText2()); // comment
         holder.mRelativeLayout.setBackgroundColor(currentItem.getImageColor()); // background color
@@ -86,6 +83,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
 
 
     // getItemCount method for the number of items to return
+    // Todo ! Change the list size
     @Override
     public int getItemCount() {
         return mHistoryList.size(); // = nbr of items in ArrayList

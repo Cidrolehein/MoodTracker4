@@ -10,8 +10,6 @@ import com.google.gson.annotations.SerializedName;
 public class HistoryItem {
 
     // HistoryItem Variables
-    @SerializedName("mood image")
-    private int mImageResource; // mood image
     @SerializedName("date")
     private String mText1; // date
     @SerializedName("comment")
@@ -24,8 +22,7 @@ public class HistoryItem {
     private int mWidth;
 
     // HistoryItem constructor
-    public HistoryItem(int imageResource, String text1, String text2, int imageColor, int height, int width) {
-        mImageResource = imageResource; // mood image
+    public HistoryItem(String text1, String text2, int imageColor, int height, int width) {
         mText1 = text1; // date
         mText2 = text2; // comment
         mImageColor = imageColor; // image color
@@ -40,10 +37,6 @@ public class HistoryItem {
 
     public int getWidth() {
         return mWidth;
-    }
-
-    public int getImageResource() {
-        return mImageResource;
     }
 
     public String getText1() {

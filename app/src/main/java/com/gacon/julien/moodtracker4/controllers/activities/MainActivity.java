@@ -258,34 +258,6 @@ public class MainActivity extends AppCompatActivity {
     } // end of Time method
 
     /**
-     * Get mood // current position
-     */
-
-    private int getCurrentMood() {
-
-        mCurrentPosition = pager.getCurrentItem();
-
-        // Get Current Position
-
-        switch (mCurrentPosition) {
-            case 0:
-                return R.drawable.smiley_sad;
-            case 1:
-                return R.drawable.smiley_disappointed;
-            case 2:
-                return R.drawable.smiley_normal;
-            case 3:
-                return R.drawable.smiley_happy;
-            case 4:
-                return R.drawable.smiley_super_happy;
-            default:
-                return R.drawable.smiley_happy;
-
-        } // end of condition
-
-    } // end of getCurrentMood method
-
-    /**
      *     Configure relative layout for history view
      */
 
@@ -319,13 +291,16 @@ public class MainActivity extends AppCompatActivity {
 
         //Define FrameLayout metrics with device metrics * size of mood
         final double [] viewSizeMultiplier = {0.25, 0.4, 0.6, 0.8, 1};
+
         getDeviceMetrics();
 
         width = (int) (deviceWidth*viewSizeMultiplier[mCurrentPosition]);
+
+        //TODO ! adapt height
         height = (int) (deviceHeight/9);
 
     arrayList = sharedPreferences.getHistoryList(); // get history list
-    arrayList.add(new HistoryItem(getCurrentMood(), formattedTime, mNewComment, color, height, width)); // add to list
+    arrayList.add(new HistoryItem(formattedTime, mNewComment, color, height, width)); // add to list
 
     sharedPreferences.setHistoryList(arrayList); // save data
 
