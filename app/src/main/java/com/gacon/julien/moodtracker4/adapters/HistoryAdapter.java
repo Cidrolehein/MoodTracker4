@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.gacon.julien.moodtracker4.R;
 import com.gacon.julien.moodtracker4.models.Json.HistoryItem;
@@ -34,6 +35,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
         public ImageView mImageView; // mood image
         public TextView mTextView1; // date
         public TextView mTextView2; // comment
+        public RelativeLayout mRelativeLayout; // relative layout
 
         // HistoryViewHolder constructor
         public HistoryViewHolder(View itemView) {
@@ -41,6 +43,8 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
             mImageView = itemView.findViewById(R.id.imageView);
             mTextView1 = itemView.findViewById(R.id.textView);
             mTextView2 = itemView.findViewById(R.id.textView2);
+            mRelativeLayout = itemView.findViewById(R.id.relative_layout);
+
         } // end of HistoryViewHolder constructor
     } // end of HistoryViewHolder class
 
@@ -72,6 +76,12 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
         holder.mImageView.setImageResource(currentItem.getImageResource()); // mood image
         holder.mTextView1.setText(currentItem.getText1()); // date
         holder.mTextView2.setText(currentItem.getText2()); // comment
+        holder.mRelativeLayout.setBackgroundColor(currentItem.getImageColor()); // background color
+
+        // Gets the layout params that will allow you to resize the layout
+        ViewGroup.LayoutParams params = holder.mRelativeLayout.getLayoutParams();
+        params.height = currentItem.getHeight();
+        params.width = currentItem.getWidth();
     } //end of onBindViewHolder
 
 

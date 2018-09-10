@@ -1,13 +1,16 @@
 package com.gacon.julien.moodtracker4.controllers.activities;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import com.gacon.julien.moodtracker4.R;
@@ -45,6 +48,9 @@ public class MainActivity extends AppCompatActivity {
     private Button mHistoryButton; // history button
     private EditText mEditTextComment; // edit text for comment
     int mCurrentPosition; // current position of mood
+    private int color; // color of mood
+    private double deviceWidth, deviceHeight; //Width and Height of relative layout in HistoryActivity
+    private int width, height;
 
     /**
      * Array of mood items
@@ -280,6 +286,20 @@ public class MainActivity extends AppCompatActivity {
     } // end of getCurrentMood method
 
     /**
+     *     Configure relative layout for history view
+     */
+
+    // configure Width and Height
+    private void getDeviceMetrics(){
+        //Get Device Width and Height
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        WindowManager windowmanager = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
+        windowmanager.getDefaultDisplay().getMetrics(displayMetrics);
+        deviceWidth = displayMetrics.widthPixels;
+        deviceHeight = displayMetrics.heightPixels;
+    } // end of getDeviceMetrics method
+
+    /**
      * History List add new items
      */
 
@@ -293,8 +313,19 @@ public class MainActivity extends AppCompatActivity {
 
     getTimeFromTheSystem(); // get current time
 
+    mCurrentPosition = pager.getCurrentItem(); // mood position
+
+    color = getResources().getIntArray(R.array.colorPagesViewPager)[mCurrentPosition]; // background color
+
+        //Define FrameLayout metrics with device metrics * size of mood
+        final double [] viewSizeMultiplier = {0.25, 0.4, 0.6, 0.8, 1};
+        getDeviceMetrics();
+
+        width = (int) (deviceWidth*viewSizeMultiplier[mCurrentPosition]);
+        height = (int) (deviceHeight/9);
+
     arrayList = sharedPreferences.getHistoryList(); // get history list
-    arrayList.add(new HistoryItem(getCurrentMood(), formattedTime, mNewComment)); // add to list
+    arrayList.add(new HistoryItem(getCurrentMood(), formattedTime, mNewComment, color, height, width)); // add to list
 
     sharedPreferences.setHistoryList(arrayList); // save data
 
