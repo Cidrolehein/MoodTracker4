@@ -31,6 +31,7 @@ public class HistoryItem {
     } // end of HistoryItem constructor
 
     // Getters
+
     public int getHeight() {
         return mHeight;
     }

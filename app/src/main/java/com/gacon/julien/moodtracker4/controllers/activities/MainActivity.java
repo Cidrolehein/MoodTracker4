@@ -17,6 +17,9 @@ import com.gacon.julien.moodtracker4.R;
 import com.gacon.julien.moodtracker4.adapters.PageAdapter;
 import com.gacon.julien.moodtracker4.models.Json.HistoryItem;
 import com.gacon.julien.moodtracker4.models.SharedPreferences.MySharedPreferences;
+import com.gacon.julien.moodtracker4.models.Time.Time;
+import com.gacon.julien.moodtracker4.models.Time.TimeSharedPreferences;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -26,10 +29,6 @@ import java.util.Locale;
  * MoodTracker by Julien Gacon for OpenClassRooms - 2018
  * Main Activity
  ********************************************************************************/
-
-/**
- * TODO : manage current position with mood items - add sound - change current position
- */
 
 // MainActivity class
 
@@ -50,7 +49,12 @@ public class MainActivity extends AppCompatActivity {
     int mCurrentPosition; // current position of mood
     private int color; // color of mood
     private double deviceWidth, deviceHeight; //Width and Height of relative layout in HistoryActivity
-    private int width, height;
+    private int width, height; // size of list activity
+    int position; // position for list History Activity
+    private int currentY, currentM, currentD; // current time
+    private TimeSharedPreferences timeSharedPref;
+    private int inBetweenDays;
+    private String time;
 
     /**
      * Array of mood items
@@ -76,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         sharedPreferences = new MySharedPreferences(this); // initialize SharedPreferences
+        timeSharedPref = new TimeSharedPreferences(this); // time shared preferences
 
         // Configure ViewPager and Title
         this.configureViewPagerAndTitle();
@@ -124,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
 
             sharedPreferences.loadData(); // load data from sharedPreferences
+            timeSharedPref.loadData(); // load data time
 
     } // end of onStart method
 
@@ -147,6 +153,19 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
 
         addToList(); // add data to SharedPreferences
+
+        inBetweenDays();
+
+        //Get Current Time
+        currentY = Calendar.getInstance().get(Calendar.YEAR);
+        currentM = Calendar.getInstance().get(Calendar.MONTH);
+        currentD = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+
+        timeSharedPref.setYear(currentY);
+        timeSharedPref.setMonth(currentM);
+        timeSharedPref.setDay(currentD);
+
+        timeSharedPref.saveData();// time shared preferences
 
         // condition
         if (isFinishing()) { // user call finish to pause Activity
@@ -244,18 +263,42 @@ public class MainActivity extends AppCompatActivity {
      */
 
     // time
-    private String getTimeFromTheSystem() {
 
-        Locale locale = Locale.getDefault(); // get local time (phone)
-        Calendar cal = new GregorianCalendar(); // initialize calendar
-        cal.getInstance(locale);
-        cal.getTime().toLocaleString(); // time to string
+    private int inBetweenDays() {
 
-        formattedTime = cal.getTime().toLocaleString(); // variable
+        //Get Current Time
+        currentY = Calendar.getInstance().get(Calendar.YEAR);
+        currentM = Calendar.getInstance().get(Calendar.MONTH);
+        currentD = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
 
-        return formattedTime;
+        //Get Saved Time
+        int savedYear = timeSharedPref.getYear();
+        int savedMonth = timeSharedPref.getMonth();
+        int savedDay = timeSharedPref.getDay();
 
-    } // end of Time method
+        if (savedYear == currentY && savedMonth == currentM){
+            return currentD - savedDay;
+
+        } else if ((currentD < 7) && (currentY - savedYear <= 1)
+                && ((currentM - savedMonth)==1) || (savedMonth==12 && currentM==0)) {
+            int monthNbOfDays = 0;
+            switch(savedMonth) {
+                case 0: case 2 : case 4 : case 6 : case 7 : case 9 : case 11: monthNbOfDays = 31; break;
+                case 3 : case 5 : case 8 : case 10 : monthNbOfDays = 30; break;
+                case 1 : //February
+                    if((savedYear % 4 == 0)&&((savedYear%100 !=0)||(savedYear %400 == 0)))
+                        monthNbOfDays = 29;
+                    else
+                        monthNbOfDays = 28;
+                    break;
+            }
+            inBetweenDays = currentD + (monthNbOfDays-savedDay);
+        } else{
+            inBetweenDays = 7;
+        }
+
+        return inBetweenDays;
+    }
 
     /**
      *     Configure relative layout for history view
@@ -283,7 +326,11 @@ public class MainActivity extends AppCompatActivity {
         arrayList = new ArrayList<>();
     } // end of condition
 
-    getTimeFromTheSystem(); // get current time
+        if (inBetweenDays == 0) {
+            time = "Aujourd'hui";
+        } else {
+            time = "Il y a " + inBetweenDays + " jours";
+        }
 
     mCurrentPosition = pager.getCurrentItem(); // mood position
 
@@ -296,11 +343,10 @@ public class MainActivity extends AppCompatActivity {
 
         width = (int) (deviceWidth*viewSizeMultiplier[mCurrentPosition]);
 
-        //TODO ! adapt height
-        height = (int) (deviceHeight/9);
+        height = (int) (deviceHeight/7);
 
     arrayList = sharedPreferences.getHistoryList(); // get history list
-    arrayList.add(new HistoryItem(formattedTime, mNewComment, color, height, width)); // add to list
+    arrayList.add(position, new HistoryItem(time, mNewComment, color, height, width)); // add to list
 
     sharedPreferences.setHistoryList(arrayList); // save data
 
