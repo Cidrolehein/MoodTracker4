@@ -1,22 +1,18 @@
 package com.gacon.julien.moodtracker4.adapters;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gacon.julien.moodtracker4.R;
-import com.gacon.julien.moodtracker4.controllers.activities.HistoryActivity;
 import com.gacon.julien.moodtracker4.models.Json.HistoryItem;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * History RecyclerView Adapter >> "Coding in Flow" : https://www.youtube.com/watch?v=17NbUcEts9c
@@ -39,7 +35,6 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
 
         // HistoryViewHolder variables
         public TextView mTextView1; // date
-        public TextView mTextView2; // comment
         public RelativeLayout mRelativeLayout; // relative layout
         public ImageButton mCommentButton; // comment button
 
@@ -80,7 +75,6 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
         final HistoryItem currentItem = mHistoryList.get(position);
 
         holder.mTextView1.setText(currentItem.getText1()); // date
-        //holder.mTextView2.setText(currentItem.getText2()); // comment
         holder.mRelativeLayout.setBackgroundColor(currentItem.getImageColor()); // background color
 
         //Set Comment button if comment exists

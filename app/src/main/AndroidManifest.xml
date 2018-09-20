@@ -16,7 +16,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".controllers.activities.HistoryActivity"></activity>
+        <activity android:name=".controllers.activities.HistoryActivity" />
+        <activity android:name=".controllers.activities.GraphActivity"></activity>
     </application>
 
 </manifest>
