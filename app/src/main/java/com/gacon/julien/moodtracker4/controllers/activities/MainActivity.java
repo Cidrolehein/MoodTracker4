@@ -17,10 +17,13 @@ import com.gacon.julien.moodtracker4.R;
 import com.gacon.julien.moodtracker4.adapters.PageAdapter;
 import com.gacon.julien.moodtracker4.models.Json.HistoryItem;
 import com.gacon.julien.moodtracker4.models.SharedPreferences.MySharedPreferences;
+import com.gacon.julien.moodtracker4.models.Time.Time;
 import com.gacon.julien.moodtracker4.models.Time.TimeSharedPreferences;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.Locale;
 
 /********************************************************************************
  * MoodTracker by Julien Gacon for OpenClassRooms - 2018
@@ -36,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
      ********************************************************************************/
 
     private String mNewComment = "No comment"; // default comment
+    private String formattedTime; // time
     ArrayList<HistoryItem> arrayList; // history list
     private ViewPager pager; // viewpager for swiping
     MySharedPreferences sharedPreferences; // shared preferences
@@ -342,7 +346,7 @@ public class MainActivity extends AppCompatActivity {
         height = (int) (deviceHeight/7);
 
     arrayList = sharedPreferences.getHistoryList(); // get history list
-    arrayList.add(position, new HistoryItem(time, mNewComment, color, mCurrentPosition, height, width)); // add to list
+    arrayList.add(position, new HistoryItem(time, mNewComment, color, height, width)); // add to list
 
     sharedPreferences.setHistoryList(arrayList); // save data
 

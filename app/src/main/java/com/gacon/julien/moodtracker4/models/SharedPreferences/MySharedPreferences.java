@@ -7,6 +7,8 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
+// TODO : complete shared preferences
+
 /**
  * class to manage SharedPreferences
  */
