@@ -329,21 +329,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
     mCurrentPosition = pager.getCurrentItem(); // mood position
-
     color = getResources().getIntArray(R.array.colorPagesViewPager)[mCurrentPosition]; // background color
-
         //Define FrameLayout metrics with device metrics * size of mood
         final double [] viewSizeMultiplier = {0.25, 0.4, 0.6, 0.8, 1};
-
         getDeviceMetrics();
-
         width = (int) (deviceWidth*viewSizeMultiplier[mCurrentPosition]);
-
         height = (int) (deviceHeight/7);
-
     arrayList = sharedPreferences.getHistoryList(); // get history list
     arrayList.add(position, new HistoryItem(time, mNewComment, color, mCurrentPosition, height, width)); // add to list
-
     sharedPreferences.setHistoryList(arrayList); // save data
 
     } // end of addToList method

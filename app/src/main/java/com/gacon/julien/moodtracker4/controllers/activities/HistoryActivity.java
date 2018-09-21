@@ -70,8 +70,8 @@ public class HistoryActivity extends AppCompatActivity {
         mRecyclerView.setHasFixedSize(true); // fix size of list to increase performance
         mLayoutManager = new LinearLayoutManager(this);
         mAdapter = new HistoryAdapter(sharedPreferences.getHistoryList()); // put data from SharedPreferences to HistoryAdapter
+        mAdapter.notifyDataSetChanged();
         mPieChartBtn = findViewById(R.id.activity_history_chart_btn); // pie chart btn
-
         mRecyclerView.setLayoutManager(mLayoutManager); // pass LayoutManager to RecyclerView
         mRecyclerView.setAdapter(mAdapter); // pass Adapter to RecyclerView
     } // end of buildRecyclerView method

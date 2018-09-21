@@ -42,7 +42,6 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
         public HistoryViewHolder(View itemView) {
             super(itemView);
             mTextView1 = itemView.findViewById(R.id.textView);
-            //mTextView2 = itemView.findViewById(R.id.textView2);
             mRelativeLayout = itemView.findViewById(R.id.relative_layout);
             mCommentButton = itemView.findViewById(R.id.activity_history_comment_btn);
 
@@ -105,10 +104,10 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
 
         //return mHistoryList.size(); // = nbr of items in ArrayList
         int count = 7;
-        int i=0;
+        int i=mHistoryList.size();
 
             if (mHistoryList != null) {
-                if (count<=i) {
+                if (count>=i) {
                     return mHistoryList.size();
                 }
                 return count;

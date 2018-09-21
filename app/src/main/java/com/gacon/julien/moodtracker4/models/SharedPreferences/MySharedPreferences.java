@@ -56,12 +56,6 @@ public class MySharedPreferences {
 
         historyList = gson.fromJson(json, type); // load data
 
-        // ! condition to execute
-        if (historyList == null) {
-            historyList = new ArrayList<>();
-
-        } // end of condition
-
     } // end of load data method
 
     /**
