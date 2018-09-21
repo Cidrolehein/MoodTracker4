@@ -2,34 +2,38 @@ package com.gacon.julien.moodtracker4.models.Time;
 
 import android.content.Context;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+
 public class TimeSharedPreferences {
 
-    // TimeSharedPreferences variables
-    public static final String SHARE_PREFERENCES = "SHARE_PREFERENCES"; // key of SharedPreferences context
-    public static final String TIME = "TIME"; // key of shared preferences mood list
+    // MySharedPreferences variables
+    public static final String TIME_SHARE_PREFERENCES = "TIME_SHARE_PREFERENCES"; // key of SharedPreferences context
+    public static final String TIME_LIST = "TIME_LIST"; // key of shared preferences mood list
     private static Context context; // get context
-    private int mYear;
-    private int mMonth;
-    private int mDay;
-    private int mBetweenDay;
+    private ArrayList<Time> timelist; // history array list
 
     // constructor
-    public TimeSharedPreferences(Context context) {
+    public TimeSharedPreferences (Context context) {
         this.context = context;
-
     } // end of constructor
 
     // save data method
     public void saveData() {
 
         // initialize SharedPreferences
-        android.content.SharedPreferences sharedPreferences = context.getSharedPreferences(SHARE_PREFERENCES, 0);
+        android.content.SharedPreferences sharedPreferences = context.getSharedPreferences(TIME_SHARE_PREFERENCES, 0);
         android.content.SharedPreferences.Editor editor = sharedPreferences.edit();
 
-        editor.putInt("TodayYear", mYear); // put year
-        editor.putInt("CurrentMonth", mMonth); // put month
-        editor.putInt("CurrentDay", mDay); // put day
-        editor.putInt("BetweenDay", mBetweenDay); // mBetweenDay
+        Gson gson = new Gson(); // initialize Gson for Json
+
+        //To Json
+        String json = gson.toJson(timelist);
+
+        editor.putString(TIME_LIST, json); // put string into json list
         editor.commit();
 
     } // end of save data method
@@ -37,40 +41,30 @@ public class TimeSharedPreferences {
     // load data method
     public void loadData() {
 
+        Gson gson = new Gson(); // initialize Gson for Json
+
         // initialize SharedPreferences
-        android.content.SharedPreferences sharedPreferences = context.getSharedPreferences(SHARE_PREFERENCES, 0);
-        mYear = sharedPreferences.getInt("TodayYear", 0);
-        mMonth = sharedPreferences.getInt("CurrentMonth", 0);
-        mDay = sharedPreferences.getInt("CurrentDay", 0);
-        mBetweenDay = sharedPreferences.getInt("BetweenDay", 0);
+        android.content.SharedPreferences sharedPreferences = context.getSharedPreferences(TIME_SHARE_PREFERENCES, 0);
+        String json = sharedPreferences.getString(TIME_LIST, null);
 
-    } // end of loadData method
+        Type type = new TypeToken<ArrayList<Time>>() {
+        }.getType(); // add data to the list of Json
 
-    public void setYear(int year) {
-        mYear = year;
-    }
+        timelist = gson.fromJson(json, type); // load data
 
-    public void setMonth(int month) {
-        mMonth = month;
-    }
+    } // end of load data method
 
-    public void setDay(int day) {
-        mDay = day;
-    }
+    /**
+     * setters and getters
+     */
 
-    public int getBetweenDay() {
-        return mBetweenDay;
-    }
+    // getHistoryList
+    public ArrayList<Time> getTimeList() {
+        return timelist;
+    } // end of getHistoryList
 
-    public int getYear() {
-        return mYear;
-    }
-
-    public int getMonth() {
-        return mMonth;
-    }
-
-    public int getDay() {
-        return mDay;
-    }
+    // setHistoryList
+    public void setTimeList(ArrayList<Time> timeList) {
+        this.timelist = timeList;
+    } //end of setHistoryList
 }
