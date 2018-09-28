@@ -15,8 +15,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import com.gacon.julien.moodtracker4.R;
 import com.gacon.julien.moodtracker4.adapters.PageAdapter;
+import com.gacon.julien.moodtracker4.models.HashMap.DateItem;
+import com.gacon.julien.moodtracker4.models.HashMap.GeneralItem;
+import com.gacon.julien.moodtracker4.models.HashMap.ListItem;
 import com.gacon.julien.moodtracker4.models.Json.HistoryItem;
+import com.gacon.julien.moodtracker4.models.SharedPreferences.MapSharedPref;
 import com.gacon.julien.moodtracker4.models.SharedPreferences.MySharedPreferences;
+import com.gacon.julien.moodtracker4.models.Time.CurrentDate;
 import com.gacon.julien.moodtracker4.models.Time.Time;
 import com.gacon.julien.moodtracker4.models.Time.TimeSharedPreferences;
 
@@ -24,6 +29,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 
 /********************************************************************************
@@ -53,10 +60,12 @@ public class MainActivity extends AppCompatActivity {
     int position; // position for list History Activity
     private int currentY, currentM, currentD; // current time
     private TimeSharedPreferences timeSharedPref;
+    private MapSharedPref mapSharedPref;
     private int inBetweenDays;
     private String time;
     SimpleDateFormat mTime;
     private ArrayList<Time> timeArray;
+    private ArrayList<ListItem> consolidatedList;
 
     /**
      * Array of mood items
@@ -83,6 +92,9 @@ public class MainActivity extends AppCompatActivity {
 
         sharedPreferences = new MySharedPreferences(this); // initialize SharedPreferences
         timeSharedPref = new TimeSharedPreferences(this); // time shared preferences
+        mapSharedPref = new MapSharedPref(this);
+
+        consolidatedList = new ArrayList<>();
 
         // Configure ViewPager and Title
         this.configureViewPagerAndTitle();
@@ -155,7 +167,6 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
 
         addToList(); // add data to SharedPreferences
-        addTimeList();
 
         //Get Current Time
         currentY = Calendar.getInstance().get(Calendar.YEAR);
@@ -256,16 +267,6 @@ public class MainActivity extends AppCompatActivity {
     } // end of AlertDialog method
 
     /**
-     * data
-     */
-
-    // time
-
-    private void getTime() {
-        mTime = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.FRANCE);
-    }
-
-    /**
      *     Configure relative layout for history view
      */
 
@@ -291,11 +292,8 @@ public class MainActivity extends AppCompatActivity {
         arrayList = new ArrayList<>();
     } // end of condition
 
-        if (inBetweenDays == 0) {
-            time = "Aujourd'hui";
-        } else {
-            time = "Il y a " + inBetweenDays + " jours";
-        }
+        CurrentDate cDate = new CurrentDate();
+        time = cDate.getTime();
 
     mCurrentPosition = pager.getCurrentItem(); // mood position
     color = getResources().getIntArray(R.array.colorPagesViewPager)[mCurrentPosition]; // background color
@@ -305,21 +303,38 @@ public class MainActivity extends AppCompatActivity {
         width = (int) (deviceWidth*viewSizeMultiplier[mCurrentPosition]);
         height = (int) (deviceHeight/7);
     arrayList = sharedPreferences.getHistoryList(); // get history list
-    arrayList.add(position, new HistoryItem(time, mNewComment, color, mCurrentPosition, height, width)); // add to list
-    sharedPreferences.setHistoryList(arrayList); // save data
+    arrayList.add(position, new HistoryItem(time, mNewComment, color, mCurrentPosition, height, width));// add to list
+
+        groupDataIntoHashMap(arrayList);
+        mapSharedPref.saveHashMap(time, groupDataIntoHashMap(arrayList));
+
+        sharedPreferences.setHistoryList(arrayList); // save data
 
     } // end of addToList method
 
-    private void addTimeList() {
-        getTime();
+    private HashMap<String, ArrayList<HistoryItem>> groupDataIntoHashMap(ArrayList<HistoryItem> listOfHistoryItems) {
 
-        if (timeArray == null) {
-            timeArray = new ArrayList<>();
+        HashMap<String, ArrayList<HistoryItem>> groupedHashMap = new HashMap<>();
+
+        CurrentDate cdate = new CurrentDate();
+
+        for (HistoryItem historyItems : listOfHistoryItems) {
+
+            String hashMapKey = cdate.getTime();
+
+            if (groupedHashMap.containsKey(hashMapKey)) {
+
+
+            } else {
+                // The key is not there in the HashMap; create a new key-value pair
+                ArrayList<HistoryItem> list = new ArrayList<>();
+                list.add(historyItems);
+                groupedHashMap.put(hashMapKey, list);
+            }
+
         }
 
-        timeArray = timeSharedPref.getTimeList();
-        //timeArray.add(mTime);
-
+        return groupedHashMap;
     }
 
 } // end of MainActivity class

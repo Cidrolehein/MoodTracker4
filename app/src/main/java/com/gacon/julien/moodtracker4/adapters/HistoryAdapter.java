@@ -11,8 +11,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gacon.julien.moodtracker4.R;
+import com.gacon.julien.moodtracker4.models.HashMap.DateItem;
+import com.gacon.julien.moodtracker4.models.HashMap.GeneralItem;
+import com.gacon.julien.moodtracker4.models.HashMap.ListItem;
 import com.gacon.julien.moodtracker4.models.Json.HistoryItem;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * History RecyclerView Adapter >> "Coding in Flow" : https://www.youtube.com/watch?v=17NbUcEts9c
@@ -23,7 +29,7 @@ import java.util.ArrayList;
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder> {
 
     // HistoryAdapter variables
-    private ArrayList<HistoryItem> mHistoryList; // ArrayList for HistoryAdapter method
+    private ArrayList<ListItem> mHistoryList; // ArrayList for HistoryAdapter method
 
     // HistoryViewHolder class
 
@@ -49,7 +55,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
     } // end of HistoryViewHolder class
 
     // HistoryAdapter method for data of Arraylist
-    public HistoryAdapter(ArrayList<HistoryItem> historyList){
+    public HistoryAdapter(ArrayList<ListItem> historyList){
        mHistoryList = historyList;
     }// end of HistoryAdapter method
 
@@ -70,31 +76,32 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
 
     // onBindViewHolder method for list of items and position
     @Override
-    public void onBindViewHolder(@NonNull final HistoryViewHolder holder, int position) {
-        final HistoryItem currentItem = mHistoryList.get(position);
+    public void onBindViewHolder(@NonNull final HistoryViewHolder holder, final int position) {
+                final GeneralItem generalItem = (GeneralItem) mHistoryList.get(position);
 
-        holder.mTextView1.setText(currentItem.getText1()); // date
-        holder.mRelativeLayout.setBackgroundColor(currentItem.getImageColor()); // background color
+                holder.mTextView1.setText(generalItem.gethistoryItemArray().getText1()); // date
+                holder.mRelativeLayout.setBackgroundColor(generalItem.gethistoryItemArray().getImageColor()); // background color
 
-        //Set Comment button if comment exists
-        if(!currentItem.getText2().equals("No comment")){
-            //Show button + if click on button, show Comment (Toast)
-            holder.mCommentButton.setVisibility(ImageButton.VISIBLE);
-            holder.mCommentButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(v.getContext(), currentItem.getText2(), Toast.LENGTH_SHORT).show();
-                }}   );
-        }
+                //Set Comment button if comment exists
+                if(!generalItem.gethistoryItemArray().getText2().equals("No comment")){
+                    //Show button + if click on button, show Comment (Toast)
+                    holder.mCommentButton.setVisibility(ImageButton.VISIBLE);
+                    holder.mCommentButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Toast.makeText(v.getContext(), generalItem.gethistoryItemArray().getText2(), Toast.LENGTH_SHORT).show();
+                        }}   );
+                }
 
-        else{
-            holder.mCommentButton.setVisibility(ImageButton.INVISIBLE);
-        }
+                else{
+                    holder.mCommentButton.setVisibility(ImageButton.INVISIBLE);
+                }
 
-        // Gets the layout params that will allow you to resize the layout
-        ViewGroup.LayoutParams params = holder.mRelativeLayout.getLayoutParams();
-        params.height = currentItem.getHeight();
-        params.width = currentItem.getWidth();
+                // Gets the layout params that will allow you to resize the layout
+                ViewGroup.LayoutParams params = holder.mRelativeLayout.getLayoutParams();
+                params.height = generalItem.gethistoryItemArray().getHeight();
+                params.width = generalItem.gethistoryItemArray().getWidth();
+
     } //end of onBindViewHolder
 
 

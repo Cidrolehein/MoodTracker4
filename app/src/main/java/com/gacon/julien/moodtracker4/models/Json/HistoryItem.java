@@ -35,7 +35,6 @@ public class HistoryItem {
 
     // Getters
 
-
     public int getCurrentMood() {
         return mCurrentMood;
     }
