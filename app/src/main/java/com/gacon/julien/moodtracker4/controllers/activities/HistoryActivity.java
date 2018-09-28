@@ -78,8 +78,9 @@ public class HistoryActivity extends AppCompatActivity {
 
         cdate = new CurrentDate();
         mapSharedPref.getHashMap(cdate.getTime());
+        mapSharedPref.getHashMap(cdate.incrementDate(-1));
 
-        HashMap<String, ArrayList<HistoryItem>> groupedHashMap = mapSharedPref.getHashMap(cdate.getTime());
+        HashMap<String, ArrayList<HistoryItem>> groupedHashMap = mapSharedPref.getHashMap(arrayList.get(0).getText1());
 
         for (String date : groupedHashMap.keySet()) {
             DateItem dateItem = new DateItem();

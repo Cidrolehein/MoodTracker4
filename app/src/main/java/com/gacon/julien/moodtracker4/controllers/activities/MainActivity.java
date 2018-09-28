@@ -323,7 +323,9 @@ public class MainActivity extends AppCompatActivity {
             String hashMapKey = cdate.getTime();
 
             if (groupedHashMap.containsKey(hashMapKey)) {
-
+                // The key is already in the HashMap; add the pojo object
+                // against the existing key.
+                //groupedHashMap.get(hashMapKey).add(historyItems);
 
             } else {
                 // The key is not there in the HashMap; create a new key-value pair
