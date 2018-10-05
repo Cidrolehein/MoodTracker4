@@ -11,14 +11,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gacon.julien.moodtracker4.R;
-import com.gacon.julien.moodtracker4.models.HashMap.DateItem;
-import com.gacon.julien.moodtracker4.models.HashMap.GeneralItem;
-import com.gacon.julien.moodtracker4.models.HashMap.ListItem;
 import com.gacon.julien.moodtracker4.models.Json.HistoryItem;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * History RecyclerView Adapter >> "Coding in Flow" : https://www.youtube.com/watch?v=17NbUcEts9c
@@ -29,7 +26,9 @@ import java.util.Map;
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder> {
 
     // HistoryAdapter variables
-    private ArrayList<ListItem> mHistoryList; // ArrayList for HistoryAdapter method
+    private Map<String, List<HistoryItem>> mData = new TreeMap<>(); // ArrayList for HistoryAdapter method
+    private ArrayList<String> mKeys;
+    ArrayList<Map<String, List<HistoryItem>>> hashMapArraylist;
 
     // HistoryViewHolder class
 
@@ -55,9 +54,15 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
     } // end of HistoryViewHolder class
 
     // HistoryAdapter method for data of Arraylist
-    public HistoryAdapter(ArrayList<ListItem> historyList){
-       mHistoryList = historyList;
+    public HistoryAdapter(Map<String, List<HistoryItem>> mData, ArrayList<Map<String, List<HistoryItem>>> hashMapArraylist){
+        this.mData = mData;
+        this.hashMapArraylist = hashMapArraylist;
+        mKeys = new ArrayList<String>(mData.keySet());
     }// end of HistoryAdapter method
+
+    public String getKey(int position) {
+        return (String) mKeys.get(position);
+    }
 
 
     /**
@@ -77,30 +82,29 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
     // onBindViewHolder method for list of items and position
     @Override
     public void onBindViewHolder(@NonNull final HistoryViewHolder holder, final int position) {
-                final GeneralItem generalItem = (GeneralItem) mHistoryList.get(position);
 
-                holder.mTextView1.setText(generalItem.gethistoryItemArray().getText1()); // date
-                holder.mRelativeLayout.setBackgroundColor(generalItem.gethistoryItemArray().getImageColor()); // background color
+        final String key = getKey(position);
+        final Map<String, List<HistoryItem>> value = hashMapArraylist.get(position);
 
-                //Set Comment button if comment exists
-                if(!generalItem.gethistoryItemArray().getText2().equals("No comment")){
-                    //Show button + if click on button, show Comment (Toast)
-                    holder.mCommentButton.setVisibility(ImageButton.VISIBLE);
-                    holder.mCommentButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Toast.makeText(v.getContext(), generalItem.gethistoryItemArray().getText2(), Toast.LENGTH_SHORT).show();
-                        }}   );
-                }
+        holder.mTextView1.setText(value.get(key).get(position).getText1()); // date
+        holder.mRelativeLayout.setBackgroundColor(value.get(key).get(position).getImageColor()); // background color
 
-                else{
-                    holder.mCommentButton.setVisibility(ImageButton.INVISIBLE);
-                }
+        //Set Comment button if comment exists
+        if(!value.get(key).get(position).getText2().equals("No comment")){
+            //Show button + if click on button, show Comment (Toast)
+            holder.mCommentButton.setVisibility(ImageButton.VISIBLE);
+            holder.mCommentButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(v.getContext(), value.get(key).get(position).getText2(), Toast.LENGTH_SHORT).show();
+                }}   );
+        }
 
-                // Gets the layout params that will allow you to resize the layout
-                ViewGroup.LayoutParams params = holder.mRelativeLayout.getLayoutParams();
-                params.height = generalItem.gethistoryItemArray().getHeight();
-                params.width = generalItem.gethistoryItemArray().getWidth();
+        // Gets the layout params that will allow you to resize the layout
+        ViewGroup.LayoutParams params = holder.mRelativeLayout.getLayoutParams();
+        params.height = value.get(key).get(position).getHeight();
+        params.width = value.get(key).get(position).getWidth();
+
 
     } //end of onBindViewHolder
 
@@ -109,17 +113,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
     @Override
     public int getItemCount() {
 
-        //return mHistoryList.size(); // = nbr of items in ArrayList
-        int count = 7;
-        int i=mHistoryList.size();
-
-            if (mHistoryList != null) {
-                if (count>=i) {
-                    return mHistoryList.size();
-                }
-                return count;
-            }
-            return 0;
+        return (null != hashMapArraylist ? hashMapArraylist.size() : 0);
 
     } // end of getItemCount method
 
