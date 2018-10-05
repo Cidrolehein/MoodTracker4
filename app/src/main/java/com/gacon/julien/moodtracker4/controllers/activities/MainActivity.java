@@ -32,6 +32,8 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.TreeMap;
 
 /********************************************************************************
  * MoodTracker by Julien Gacon for OpenClassRooms - 2018
@@ -168,21 +170,6 @@ public class MainActivity extends AppCompatActivity {
 
         addToList(); // add data to SharedPreferences
 
-        //Get Current Time
-        currentY = Calendar.getInstance().get(Calendar.YEAR);
-        currentM = Calendar.getInstance().get(Calendar.MONTH);
-        currentD = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
-
-        timeSharedPref.saveData();// time shared preferences
-
-        // condition
-        if (isFinishing()) { // user call finish to pause Activity
-
-
-        } else { // user don't call finish
-
-        } // end of condition
-
     } // end of onPause method
 
     /**
@@ -304,40 +291,9 @@ public class MainActivity extends AppCompatActivity {
         height = (int) (deviceHeight/7);
     arrayList = sharedPreferences.getHistoryList(); // get history list
     arrayList.add(position, new HistoryItem(time, mNewComment, color, mCurrentPosition, height, width));// add to list
-
-        groupDataIntoHashMap(arrayList);
-        mapSharedPref.saveHashMap(time, groupDataIntoHashMap(arrayList));
-
         sharedPreferences.setHistoryList(arrayList); // save data
 
     } // end of addToList method
-
-    private HashMap<String, ArrayList<HistoryItem>> groupDataIntoHashMap(ArrayList<HistoryItem> listOfHistoryItems) {
-
-        HashMap<String, ArrayList<HistoryItem>> groupedHashMap = new HashMap<>();
-
-        CurrentDate cdate = new CurrentDate();
-
-        for (HistoryItem historyItems : listOfHistoryItems) {
-
-            String hashMapKey = cdate.getTime();
-
-            if (groupedHashMap.containsKey(hashMapKey)) {
-                // The key is already in the HashMap; add the pojo object
-                // against the existing key.
-                //groupedHashMap.get(hashMapKey).add(historyItems);
-
-            } else {
-                // The key is not there in the HashMap; create a new key-value pair
-                ArrayList<HistoryItem> list = new ArrayList<>();
-                list.add(historyItems);
-                groupedHashMap.put(hashMapKey, list);
-            }
-
-        }
-
-        return groupedHashMap;
-    }
 
 } // end of MainActivity class
 

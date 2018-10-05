@@ -10,26 +10,10 @@ public class CurrentDate {
     private String strTime = "";
 
     public String getTime() {
-        SimpleDateFormat mTime = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat mTime = new SimpleDateFormat("yyyy-MM-dd");
         strTime = mTime.format(Calendar.getInstance().getTime());
         return strTime;
     }
-
-public String incrementDate(int i) {
-        String dateInString = this.getTime();  // Start date
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-        Calendar c = Calendar.getInstance();
-    try {
-        c.setTime(sdf.parse(dateInString));
-    } catch (ParseException e) {
-        e.printStackTrace();
-    }
-    c.add(Calendar.DATE, i);
-        sdf = new SimpleDateFormat("dd/MM/yyyy");
-        Date resultdate = new Date(c.getTimeInMillis());
-        dateInString = sdf.format(resultdate);
-        return dateInString;
-}
 
 }
 

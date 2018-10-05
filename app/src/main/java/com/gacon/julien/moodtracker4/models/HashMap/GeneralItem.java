@@ -2,7 +2,9 @@ package com.gacon.julien.moodtracker4.models.HashMap;
 
 import com.gacon.julien.moodtracker4.models.Json.HistoryItem;
 
-public class GeneralItem extends ListItem {
+import java.util.ArrayList;
+
+public class GeneralItem {
 
     private HistoryItem historyItemArray;
 
@@ -13,11 +15,5 @@ public class GeneralItem extends ListItem {
     public void sethistoryItemArray(HistoryItem historyItemArray) {
         this.historyItemArray = historyItemArray;
     }
-
-    @Override
-    public int getType() {
-        return TYPE_GENERAL;
-    }
-
 
 }
