@@ -144,9 +144,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-            sharedPreferences.loadData(); // load data from sharedPreferences
-            timeSharedPref.loadData(); // load data time
-
     } // end of onStart method
 
     /**
@@ -215,7 +212,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Set default position
-        pager.setCurrentItem(3);
+        sharedPreferences.loadData(); // load data from sharedPreferences
+        int currentPosition = sharedPreferences.getHistoryList().get(0).getCurrentMood();
+        pager.setCurrentItem(currentPosition);
 
     } // end of configureViewPagerAndTitle method
 
