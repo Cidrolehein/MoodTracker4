@@ -90,15 +90,18 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
         holder.mRelativeLayout.setBackgroundColor(value.get(key).get(position).getImageColor()); // background color
 
         //Set Comment button if comment exists
-        if(!value.get(key).get(position).getText2().equals("No comment")){
+        if(value.get(key).get(position).getText2().equals("No comment")){
             //Show button + if click on button, show Comment (Toast)
-            holder.mCommentButton.setVisibility(ImageButton.VISIBLE);
+            holder.mCommentButton.setVisibility(ImageButton.INVISIBLE);
+        }
+        else {
             holder.mCommentButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Toast.makeText(v.getContext(), value.get(key).get(position).getText2(), Toast.LENGTH_SHORT).show();
                 }}   );
         }
+
 
         // Gets the layout params that will allow you to resize the layout
         ViewGroup.LayoutParams params = holder.mRelativeLayout.getLayoutParams();

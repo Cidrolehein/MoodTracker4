@@ -130,33 +130,32 @@ public class HistoryActivity extends AppCompatActivity {
 
     private Map<String, List<HistoryItem>> groupDataIntoTreeMap(ArrayList<HistoryItem> listOfHistoryItems) {
 
-        ArrayList<HistoryItem> consolidatedList;
-
-        consolidatedList = new ArrayList<>();
-
         if (groupedHashMap == null) {
             groupedHashMap = new TreeMap<String, List<HistoryItem>>();
         }
 
-        for (int i = 0; i < listOfHistoryItems.size(); i++) {
-            String hashMapKey = listOfHistoryItems.get(i).getText1();
-            for (HistoryItem historyItems : listOfHistoryItems) {
+        ArrayList<HistoryItem> list = new ArrayList<>();
+        String hashMapKey = cdate.getTime();
 
-                if (groupedHashMap.containsKey(hashMapKey)) {
+        for (HistoryItem historyItems : listOfHistoryItems) {
+
+            for (int i = 0; i < listOfHistoryItems.size(); i++) {
+                String hashMapKeyInput = listOfHistoryItems.get(i).getText1();
+
+                if (groupedHashMap.containsKey(hashMapKeyInput)) {
                     // The key is already in the HashMap; add the pojo object
                     // against the existing key.
-                    mapSharedPref.getHashList();
+                    groupedHashMap.put(hashMapKeyInput, list);
 
                 } else {
                     // The key is not there in the HashMap; create a new key-value pair
-                    ArrayList<HistoryItem> list = new ArrayList<>();
-                    list.add(historyItems);
-                    consolidatedList.add(historyItems);
-                    groupedHashMap.put(hashMapKey, list);
-                    //mapSharedPref.getHashMap().put(hashMapKey, list);
+                    list.add(listOfHistoryItems.get(i));
+                    groupedHashMap.put(hashMapKeyInput, list);
                 }
+
             }
-        }
+
+            }
 
         return groupedHashMap;
     }
