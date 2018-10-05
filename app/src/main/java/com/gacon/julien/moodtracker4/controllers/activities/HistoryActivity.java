@@ -42,6 +42,7 @@ public class HistoryActivity extends AppCompatActivity {
     private Map<String, List<HistoryItem>> groupedHashMap;
     ArrayList<Map<String, List<HistoryItem>>> treeMapArrayList;
     CurrentDate cdate;
+    String moodDate = "";
 
     /********************************************************************************
      * History Activity Life Cycle
@@ -72,30 +73,6 @@ public class HistoryActivity extends AppCompatActivity {
         for (int i = 0; i < groupedHashMap.size(); i ++) {
             treeMapArrayList.add(i, groupedHashMap);
         }
-
-
-        ArrayList<String> keylist = new ArrayList<>();
-        ArrayList<ArrayList<HistoryItem>> listValues = new ArrayList<>();
-        for (Map.Entry<String, List<HistoryItem>> entry : groupedHashMap.entrySet()) {
-            String key = entry.getKey();
-            keylist.add(key);
-            ArrayList<HistoryItem> value = (ArrayList<HistoryItem>) entry.getValue();
-            listValues.add(value);
-            }
-
-/*
-        for (String date : groupedHashMap.keySet()) {
-            DateItem dateItem = new DateItem();
-            dateItem.setDate(date);
-            consolidatedList.add(dateItem);
-
-            for (HistoryItem historyItem : groupedHashMap.get(date)) {
-                GeneralItem generalItem = new GeneralItem();
-                generalItem.sethistoryItemArray(historyItem);
-                consolidatedList.add(generalItem);
-            }
-        }
-*/
 
         buildRecyclerView(); // create Recycler View
 
@@ -135,7 +112,6 @@ public class HistoryActivity extends AppCompatActivity {
         }
 
         ArrayList<HistoryItem> list = new ArrayList<>();
-        String hashMapKey = cdate.getTime();
 
         for (HistoryItem historyItems : listOfHistoryItems) {
 

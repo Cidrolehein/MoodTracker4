@@ -12,6 +12,8 @@ import android.widget.Toast;
 
 import com.gacon.julien.moodtracker4.R;
 import com.gacon.julien.moodtracker4.models.Json.HistoryItem;
+import com.gacon.julien.moodtracker4.models.Time.CurrentDate;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -85,8 +87,13 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
 
         final String key = getKey(position);
         final Map<String, List<HistoryItem>> value = hashMapArraylist.get(position);
+        CurrentDate cDate = new CurrentDate();
+        ArrayList<String> timeArray = new ArrayList<>();
 
-        holder.mTextView1.setText(value.get(key).get(position).getText1()); // date
+        String compare = cDate.compareDate(value.get(key).get(position).getText1());
+        timeArray.add(compare);
+
+        holder.mTextView1.setText(compare); // date
         holder.mRelativeLayout.setBackgroundColor(value.get(key).get(position).getImageColor()); // background color
 
         //Set Comment button if comment exists
@@ -116,7 +123,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
     @Override
     public int getItemCount() {
 
-        return (null != hashMapArraylist ? hashMapArraylist.size() : 0);
+        return (null != hashMapArraylist ? hashMapArraylist.size() : 7);
 
     } // end of getItemCount method
 
