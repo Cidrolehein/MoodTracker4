@@ -9,7 +9,7 @@ MoodTracker is my first student android application. With it, you can check and 
 - History Activity
 - Graph Activity
 
-Some methods ans java class :
+Some methods and java class :
 
 - Vertical PageView
 - PageFragment with items
