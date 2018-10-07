@@ -1,7 +1,7 @@
 # MoodTracker4
 MoodTracker OpenClassRoom
 
-MoodTracker is my first android application. With it, you can check and memorize your daily mood : sad, disappointed, normal, happy, super happy !
+MoodTracker is my first student android application. With it, you can check and memorize your daily mood : sad, disappointed, normal, happy, super happy !
 
 3 activities :
 
