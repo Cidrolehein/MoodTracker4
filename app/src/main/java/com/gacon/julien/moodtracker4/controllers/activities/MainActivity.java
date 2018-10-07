@@ -93,10 +93,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         sharedPreferences = new MySharedPreferences(this); // initialize SharedPreferences
-        timeSharedPref = new TimeSharedPreferences(this); // time shared preferences
         mapSharedPref = new MapSharedPref(this);
-
-        consolidatedList = new ArrayList<>();
 
         // Configure ViewPager and Title
         this.configureViewPagerAndTitle();
@@ -126,37 +123,6 @@ public class MainActivity extends AppCompatActivity {
     } // end of OnCreate method
 
     /**
-     * Restart Activity
-     */
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-
-    } // end of onRestart method
-
-    /**
-     * Start Activity
-     * Load data from Shared Preferences
-     */
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-    } // end of onStart method
-
-    /**
-     * OnResume activity
-     */
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-
-    } // end of onResume method
-
-    /**
      * Activity on Pause method
      * Add data to shared preferences
      */
@@ -182,17 +148,6 @@ public class MainActivity extends AppCompatActivity {
 
     } // end of on stop method
 
-    /**
-     * Destroy activity
-     */
-
-    @Override
-    protected void onDestroy(){
-        super.onDestroy();
-
-    } // end of onDestroy method
-
-
     /********************************************************************************
      * MainActivity methods
      ********************************************************************************/
@@ -213,8 +168,16 @@ public class MainActivity extends AppCompatActivity {
 
         // Set default position
         sharedPreferences.loadData(); // load data from sharedPreferences
+        CurrentDate currentDate = new CurrentDate();
         int currentPosition = sharedPreferences.getHistoryList().get(0).getCurrentMood();
-        pager.setCurrentItem(currentPosition);
+        String timeBefore = sharedPreferences.getHistoryList().get(0).getText1();
+        String timeNow = currentDate.getTime();
+        if (currentDate.compareDate(timeBefore) == "Aujourd'hui") {
+            pager.setCurrentItem(currentPosition);
+        } else {
+            pager.setCurrentItem(3);
+        }
+
 
     } // end of configureViewPagerAndTitle method
 
