@@ -3,20 +3,13 @@ package com.gacon.julien.moodtracker4.controllers.activities;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.EventLogTags;
-
 import com.gacon.julien.moodtracker4.R;
 import com.gacon.julien.moodtracker4.models.SharedPreferences.MySharedPreferences;
-import com.gacon.julien.moodtracker4.models.Time.TimeSharedPreferences;
 import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.components.Description;
-import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
-
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;

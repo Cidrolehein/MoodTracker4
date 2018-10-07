@@ -1,4 +1,4 @@
-package com.gacon.julien.moodtracker4.models.Json;
+package com.gacon.julien.moodtracker4.models.HashMap;
 
 import com.google.gson.annotations.SerializedName;
 

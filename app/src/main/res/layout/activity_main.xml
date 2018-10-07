@@ -28,12 +28,12 @@
         android:layout_marginRight="20dp"
         android:layout_alignParentRight="true" />
 
-    <com.gacon.julien.moodtracker4.models.VerticalViewPager
+    <com.gacon.julien.moodtracker4.views.swipe.VerticalViewPager
         android:id="@+id/vertical_viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true">
 
-    </com.gacon.julien.moodtracker4.models.VerticalViewPager>
+    </com.gacon.julien.moodtracker4.views.swipe.VerticalViewPager>
 
 </RelativeLayout>

@@ -14,26 +14,11 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import com.gacon.julien.moodtracker4.R;
-import com.gacon.julien.moodtracker4.adapters.PageAdapter;
-import com.gacon.julien.moodtracker4.models.HashMap.DateItem;
-import com.gacon.julien.moodtracker4.models.HashMap.GeneralItem;
-import com.gacon.julien.moodtracker4.models.HashMap.ListItem;
-import com.gacon.julien.moodtracker4.models.Json.HistoryItem;
-import com.gacon.julien.moodtracker4.models.SharedPreferences.MapSharedPref;
+import com.gacon.julien.moodtracker4.views.adapters.PageAdapter;
+import com.gacon.julien.moodtracker4.models.HashMap.HistoryItem;
 import com.gacon.julien.moodtracker4.models.SharedPreferences.MySharedPreferences;
 import com.gacon.julien.moodtracker4.models.Time.CurrentDate;
-import com.gacon.julien.moodtracker4.models.Time.Time;
-import com.gacon.julien.moodtracker4.models.Time.TimeSharedPreferences;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.TreeMap;
 
 /********************************************************************************
  * MoodTracker by Julien Gacon for OpenClassRooms - 2018
@@ -60,14 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private double deviceWidth, deviceHeight; //Width and Height of relative layout in HistoryActivity
     private int width, height; // size of list activity
     int position; // position for list History Activity
-    private int currentY, currentM, currentD; // current time
-    private TimeSharedPreferences timeSharedPref;
-    private MapSharedPref mapSharedPref;
-    private int inBetweenDays;
     private String time;
-    SimpleDateFormat mTime;
-    private ArrayList<Time> timeArray;
-    private ArrayList<ListItem> consolidatedList;
 
     /**
      * Array of mood items
@@ -93,7 +71,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         sharedPreferences = new MySharedPreferences(this); // initialize SharedPreferences
-        mapSharedPref = new MapSharedPref(this);
 
         // Configure ViewPager and Title
         this.configureViewPagerAndTitle();

@@ -1,4 +1,5 @@
-package com.gacon.julien.moodtracker4.adapters;
+package com.gacon.julien.moodtracker4.views.adapters;
+
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;

@@ -7,14 +7,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
-
 import com.gacon.julien.moodtracker4.R;
-import com.gacon.julien.moodtracker4.adapters.HistoryAdapter;
-import com.gacon.julien.moodtracker4.models.Json.HistoryItem;
-import com.gacon.julien.moodtracker4.models.SharedPreferences.MapSharedPref;
+import com.gacon.julien.moodtracker4.views.adapters.HistoryAdapter;
+import com.gacon.julien.moodtracker4.models.HashMap.HistoryItem;
 import com.gacon.julien.moodtracker4.models.SharedPreferences.MySharedPreferences;
 import com.gacon.julien.moodtracker4.models.Time.CurrentDate;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -36,13 +33,11 @@ public class HistoryActivity extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter; // bridge our data between ArrayList and RecyclerView
     private RecyclerView.LayoutManager mLayoutManager; // manage the ListView
     private MySharedPreferences sharedPreferences; // load MySharedPreferences for data
-    private MapSharedPref mapSharedPref;
     private Button mPieChartBtn; // btn pie chart
     private ArrayList<HistoryItem> arrayList; // history list
     private Map<String, List<HistoryItem>> groupedHashMap;
-    ArrayList<Map<String, List<HistoryItem>>> treeMapArrayList;
-    CurrentDate cdate;
-    String moodDate = "";
+    private ArrayList<Map<String, List<HistoryItem>>> treeMapArrayList;
+    private CurrentDate cdate;
 
     /********************************************************************************
      * History Activity Life Cycle
@@ -56,7 +51,6 @@ public class HistoryActivity extends AppCompatActivity {
 
         sharedPreferences = new MySharedPreferences(this); // initialize MySharedPreferences
         sharedPreferences.loadData(); // load data from shared pref
-        mapSharedPref = new MapSharedPref(this);
 
         // ! condition
         if (arrayList == null) {

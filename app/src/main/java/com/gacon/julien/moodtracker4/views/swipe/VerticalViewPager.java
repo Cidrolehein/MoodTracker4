@@ -1,4 +1,4 @@
-package com.gacon.julien.moodtracker4.models;
+package com.gacon.julien.moodtracker4.views.swipe;
 
 // Vertical ViewPager
 

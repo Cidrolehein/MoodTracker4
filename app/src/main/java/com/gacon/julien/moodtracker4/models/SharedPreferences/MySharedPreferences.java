@@ -1,7 +1,7 @@
 package com.gacon.julien.moodtracker4.models.SharedPreferences;
 
 import android.content.Context;
-import com.gacon.julien.moodtracker4.models.Json.HistoryItem;
+import com.gacon.julien.moodtracker4.models.HashMap.HistoryItem;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;

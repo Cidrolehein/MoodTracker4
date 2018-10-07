@@ -1,4 +1,4 @@
-package com.gacon.julien.moodtracker4.adapters;
+package com.gacon.julien.moodtracker4.views.adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -11,7 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gacon.julien.moodtracker4.R;
-import com.gacon.julien.moodtracker4.models.Json.HistoryItem;
+import com.gacon.julien.moodtracker4.models.HashMap.HistoryItem;
 import com.gacon.julien.moodtracker4.models.Time.CurrentDate;
 
 import java.util.ArrayList;
