@@ -64,7 +64,7 @@ public class GraphActivity extends AppCompatActivity {
 
         try {
             jsonArray = new JSONArray(json);
-            for (int i = 1; i < 8; i++) {
+            for (int i = 1; i < jsonArray.length(); i++) {
             JSONObject jsonObject = jsonArray.getJSONObject(i);
                 color = jsonObject.getInt("Image color");
             currentMood = jsonObject.getInt("Mood Index");
