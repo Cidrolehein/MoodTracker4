@@ -43,7 +43,7 @@ public class CurrentDate {
         } else if (moodDate.compareTo(this.strTime) < 0) {
 
             if (diffDays < 7) {
-                day = "Il y a " + diffDays + " jours";
+                day = "Il y a " + diffDays + " jour(s)";
             } else if (diffDays == 7) {
                 day = "Il y a une semaine";
             }
