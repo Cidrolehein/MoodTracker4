@@ -87,6 +87,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
         final Map<String, List<HistoryItem>> value = hashMapArraylist.get(position);
         CurrentDate cDate = new CurrentDate();
         ArrayList<String> timeArray = new ArrayList<>();
+        String comment = value.get(key).get(position).getText2();
 
         String compare = cDate.compareDate(value.get(key).get(position).getText1());
         timeArray.add(compare);
@@ -95,7 +96,11 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
         holder.mRelativeLayout.setBackgroundColor(value.get(key).get(position).getImageColor()); // background color
 
         //Set Comment button if comment exists
-        if(value.get(key).get(position).getText2().equals("No comment")){
+        if (comment == null) {
+            comment = "No comment";
+        }
+
+        if(comment.equals("No comment")){
             //Show button + if click on button, show Comment (Toast)
             holder.mCommentButton.setVisibility(ImageButton.INVISIBLE);
         }
@@ -103,6 +108,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
             holder.mCommentButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Toast toast = new Toast(v.getContext());
                     Toast.makeText(v.getContext(), value.get(key).get(position).getText2(), Toast.LENGTH_SHORT).show();
                 }}   );
         }

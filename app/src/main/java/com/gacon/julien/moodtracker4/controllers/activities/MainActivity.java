@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
         // Configure ViewPager and Title
         this.configureViewPagerAndTitle();
 
+
         mNoteAddButton = (Button) findViewById(R.id.ic_note_add_black);
         mHistoryButton = (Button) findViewById(R.id.ic_history_black);
 
@@ -99,6 +100,12 @@ public class MainActivity extends AppCompatActivity {
 
     } // end of OnCreate method
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mNewComment = "No comment";
+    }
+
     /**
      * Activity on Pause method
      * Add data to shared preferences
@@ -119,9 +126,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-        super.onStop();
 
         sharedPreferences.saveData(); // save shared preferences
+
+        super.onStop();
 
     } // end of on stop method
 
@@ -140,11 +148,12 @@ public class MainActivity extends AppCompatActivity {
         pager = (ViewPager)findViewById(R.id.vertical_viewpager);
 
         // Set Adapter PageAdapter and glue it together
-        pager.setAdapter(new PageAdapter(getSupportFragmentManager(), this.imageMoods, getResources().getIntArray(R.array.colorPagesViewPager)) {
+        pager.setAdapter(new PageAdapter(getSupportFragmentManager(), this.imageMoods, getResources().getIntArray(R.array.colorPagesViewPager), mNewComment) {
         });
 
-        // Set default position
         sharedPreferences.loadData(); // load data from sharedPreferences
+
+        // Set default position
         CurrentDate currentDate = new CurrentDate();
         int currentPosition = sharedPreferences.getHistoryList().get(0).getCurrentMood();
         String timeBefore = sharedPreferences.getHistoryList().get(0).getText1();
@@ -184,7 +193,6 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         mNewComment = mEditTextComment.getText().toString();
-
                     }
                 }) // end of OK button method
                 .create() // create view
