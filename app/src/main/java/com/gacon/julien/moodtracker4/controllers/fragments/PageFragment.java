@@ -19,14 +19,13 @@ public class PageFragment extends Fragment {
     private static final String KEY_POSITION = "KEY_POSITION";
     private static final String KEY_COLOR = "KEY_COLOR";
     private static final String KEY_IMAGE = "KEY_IMAGE";
-    private static final String KEY_COMMENT = "KEY_COMMENT";
 
     public PageFragment() {
         // Required empty public constructor
     }
 
     // 2 - Method that will create a new instance of PageFragment, and add data to its bundle.
-    public static PageFragment newInstance(int position, int image, int color, String comment) {
+    public static PageFragment newInstance(int position, int image, int color) {
 
         // 2.1 Create new fragment
         PageFragment fragment = new PageFragment();
@@ -36,7 +35,6 @@ public class PageFragment extends Fragment {
         args.putInt(KEY_POSITION, position);
         args.putInt(KEY_COLOR, color);
         args.putInt(KEY_IMAGE, image);
-        args.putString(KEY_COMMENT, comment);
         fragment.setArguments(args);
 
         return fragment;
@@ -57,7 +55,6 @@ public class PageFragment extends Fragment {
         int position = getArguments().getInt(KEY_POSITION, -1);
         int color = getArguments().getInt(KEY_COLOR, -1);
         int images = getArguments().getInt(KEY_IMAGE, -1);
-        String comment = getArguments().getString(KEY_COMMENT, "No comment");
 
         rootView.setBackgroundColor(color);
         imageView.setImageResource(images);

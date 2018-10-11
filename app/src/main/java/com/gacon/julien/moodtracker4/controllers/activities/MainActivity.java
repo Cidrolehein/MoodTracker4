@@ -126,10 +126,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
+        super.onStop();
 
         sharedPreferences.saveData(); // save shared preferences
-
-        super.onStop();
 
     } // end of on stop method
 
@@ -147,19 +146,28 @@ public class MainActivity extends AppCompatActivity {
         // Get ViewPager from layout
         pager = (ViewPager)findViewById(R.id.vertical_viewpager);
 
-        // Set Adapter PageAdapter and glue it together
-        pager.setAdapter(new PageAdapter(getSupportFragmentManager(), this.imageMoods, getResources().getIntArray(R.array.colorPagesViewPager), mNewComment) {
-        });
-
         sharedPreferences.loadData(); // load data from sharedPreferences
+
+        // ! condition
+        if (arrayList == null) {
+            arrayList = new ArrayList<>();
+        } // end of condition
+
+        arrayList = sharedPreferences.getHistoryList(); // get history list
+
+        // Set Adapter PageAdapter and glue it together
+        pager.setAdapter(new PageAdapter(getSupportFragmentManager(), this.imageMoods, getResources().getIntArray(R.array.colorPagesViewPager)) {
+        });
 
         // Set default position
         CurrentDate currentDate = new CurrentDate();
-        int currentPosition = sharedPreferences.getHistoryList().get(0).getCurrentMood();
-        String timeBefore = sharedPreferences.getHistoryList().get(0).getText1();
-        String timeNow = currentDate.getTime();
-        if (currentDate.compareDate(timeBefore) == "Aujourd'hui") {
-            pager.setCurrentItem(currentPosition);
+        if (arrayList != null && arrayList.size() != 0) {
+            int currentPosition = sharedPreferences.getHistoryList().get(0).getCurrentMood();
+            String timeBefore = sharedPreferences.getHistoryList().get(0).getText1();
+            String timeNow = currentDate.getTime();
+            if (currentDate.compareDate(timeBefore) == "Aujourd'hui") {
+                pager.setCurrentItem(currentPosition);
+            }
         } else {
             pager.setCurrentItem(3);
         }
@@ -221,11 +229,6 @@ public class MainActivity extends AppCompatActivity {
     // add to History List
     private void addToList() {
 
-        // ! condition
-    if (arrayList == null) {
-        arrayList = new ArrayList<>();
-    } // end of condition
-
         CurrentDate cDate = new CurrentDate();
         time = cDate.getTime();
 
@@ -236,9 +239,8 @@ public class MainActivity extends AppCompatActivity {
         getDeviceMetrics();
         width = (int) (deviceWidth*viewSizeMultiplier[mCurrentPosition]);
         height = (int) (deviceHeight/7);
-    arrayList = sharedPreferences.getHistoryList(); // get history list
     arrayList.add(position, new HistoryItem(time, mNewComment, color, mCurrentPosition, height, width));// add to list
-        sharedPreferences.setHistoryList(arrayList); // save data
+        sharedPreferences.setHistoryList(arrayList);
 
     } // end of addToList method
 

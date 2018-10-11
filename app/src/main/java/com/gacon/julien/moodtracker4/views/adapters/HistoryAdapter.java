@@ -127,7 +127,10 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
     @Override
     public int getItemCount() {
 
-        return 7;
+        if (hashMapArraylist.size() > 7) {
+            return 7;
+        } else
+        return (null != hashMapArraylist ? hashMapArraylist.size() : 0);
 
     } // end of getItemCount method
 

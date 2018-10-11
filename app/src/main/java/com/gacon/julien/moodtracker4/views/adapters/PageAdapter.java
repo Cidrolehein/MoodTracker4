@@ -14,15 +14,11 @@ public class PageAdapter extends FragmentPagerAdapter {
     // 1.1 - List of images
     private int[] images;
 
-    // 1.2 Comment
-    private String comment;
-
     // 2 - Default Constructor
-    public PageAdapter(FragmentManager fm, int[] images, int[] colors, String comment) {
+    public PageAdapter(FragmentManager fm, int[] images, int[] colors) {
         super(fm);
         this.images = images;
         this.colors = colors;
-        this.comment = comment;
 
     }
 
@@ -36,7 +32,7 @@ public class PageAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         // 4 - Page to return
-        return (PageFragment.newInstance(position, this.images[position], this.colors[position], this.comment));
+        return (PageFragment.newInstance(position, this.images[position], this.colors[position]));
     }
 
 }
