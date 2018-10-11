@@ -9,11 +9,9 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.gacon.julien.moodtracker4.R;
 import com.gacon.julien.moodtracker4.models.HashMap.HistoryItem;
 import com.gacon.julien.moodtracker4.models.Time.CurrentDate;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -123,7 +121,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
     @Override
     public int getItemCount() {
 
-        return (null != hashMapArraylist ? hashMapArraylist.size() : 7);
+        return 7;
 
     } // end of getItemCount method
 
