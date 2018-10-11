@@ -106,27 +106,20 @@ public class HistoryActivity extends AppCompatActivity {
         }
 
         ArrayList<HistoryItem> list = new ArrayList<>();
-
         for (HistoryItem historyItems : listOfHistoryItems) {
-
             for (int i = 0; i < listOfHistoryItems.size(); i++) {
                 String hashMapKeyInput = listOfHistoryItems.get(i).getText1();
-
                 if (groupedHashMap.containsKey(hashMapKeyInput)) {
                     // The key is already in the HashMap; add the pojo object
                     // against the existing key.
                     groupedHashMap.put(hashMapKeyInput, list);
-
                 } else {
                     // The key is not there in the HashMap; create a new key-value pair
                     list.add(listOfHistoryItems.get(i));
                     groupedHashMap.put(hashMapKeyInput, list);
                 }
-
             }
-
             }
-
         return groupedHashMap;
     }
 

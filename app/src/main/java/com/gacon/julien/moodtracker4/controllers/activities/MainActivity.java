@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
      ********************************************************************************/
 
     private String mNewComment = "No comment"; // default comment
-    ArrayList<HistoryItem> arrayList; // history list
+    private ArrayList<HistoryItem> arrayList; // history list
     private ViewPager pager; // viewpager for swiping
     MySharedPreferences sharedPreferences; // shared preferences
     private Button mNoteAddButton; // note button
