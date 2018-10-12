@@ -167,6 +167,8 @@ public class MainActivity extends AppCompatActivity {
             String timeNow = currentDate.getTime();
             if (currentDate.compareDate(timeBefore) == "Aujourd'hui") {
                 pager.setCurrentItem(currentPosition);
+            }else {
+                pager.setCurrentItem(3);
             }
         } else {
             pager.setCurrentItem(3);
